@@ -1,3 +1,9 @@
+# Read ssh public key that is used via cloud-init
+data "local_file" "ssh" {
+  filename = pathexpand("~/.ssh/id_ed25519")
+  #filename = "${path.module}/.cch/key"
+}
+
 # Defining VM Volume
 resource "libvirt_volume" "rhel9" {
 
@@ -12,13 +18,17 @@ resource "libvirt_volume" "worker" {
   count          = var.workers_count
 }
 
-resource "libvirt_cloudinit_disk" "commoninit" {
-  name      = "commoninit.iso"
-  user_data = data.template_file.user_data.rendered
-}
+#data "template_file" "user_data" {
+#  template = file("${path.module}/cloud_init.tmpl")
+#}
 
 data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
+}
+
+resource "libvirt_cloudinit_disk" "commoninit" {
+  name      = "commoninit.iso"
+  user_data = data.template_file.user_data.rendered
 }
 
 resource "libvirt_domain" "rhel9" {
