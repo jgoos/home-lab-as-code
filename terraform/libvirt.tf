@@ -12,11 +12,22 @@ resource "libvirt_volume" "worker" {
   count          = var.workers_count
 }
 
+resource "libvirt_cloudinit_disk" "commoninit" {
+  name      = "commoninit.iso"
+  user_data = data.template_file.user_data.rendered
+}
+
+data "template_file" "user_data" {
+  template = file("${path.module}/cloud_init.cfg")
+}
+
 resource "libvirt_domain" "rhel9" {
   count  = var.workers_count
   name   = "domain_${count.index}"
   memory = "1024"
   vcpu   = 1
+
+  cloudinit = libvirt_cloudinit_disk.commoninit.id
 
   network_interface {
     network_name = "default" # List networks with virsh net-list
