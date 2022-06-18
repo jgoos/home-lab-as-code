@@ -1,0 +1,10 @@
+#cloud-config
+hostname: ${hostname}
+fqdn: ${host_fqdn}
+users:
+  - name: ${cloud_user}
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ${ssh_pub_key_content}
