@@ -23,7 +23,7 @@ $ sudo virsh net-dumpxml default
   </forward>
   <bridge name='virbr0' stp='on' delay='0'/>
   <mac address='52:54:00:fa:cb:e5'/>
-  <domain name='qxyz.de' localOnly='yes'/>
+  <domain name='home.arpa' localOnly='yes'/>
   <ip address='192.168.122.1' netmask='255.255.255.0'>
     <dhcp>
       <range start='192.168.122.128' end='192.168.122.254'/>
@@ -33,7 +33,7 @@ $ sudo virsh net-dumpxml default
 ```
 
 ``` xml
-<domain name='qxyz.de' localOnly='yes'/>
+<domain name='home.arpa' localOnly='yes'/>
 ```
 
 https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/
