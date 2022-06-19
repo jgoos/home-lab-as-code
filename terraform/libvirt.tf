@@ -1,6 +1,20 @@
+resource "libvirt_network" "terraform_local_dns" {
+  name      = "terraform_local_dns"
+  mode      = "nat"
+  domain    = var.local_domain
+  addresses = ["192.168.123.0/24"]
+  dhcp {
+    enabled = true
+  }
+
+  dns {
+    local_only = true
+  }
+}
+
 resource "libvirt_volume" "rhel9" {
   name   = "rhel9"
-  source = "../rhel9/builds/packer-rhel-9-x86_64"
+  source = "../packer/rhel9/builds/packer-rhel-9-x86_64"
 }
 
 resource "libvirt_volume" "worker" {
@@ -25,7 +39,7 @@ data "template_file" "meta_data" {
   for_each = var.vm
   template = file("${path.module}/cloud_init_meta_data.tmpl")
   vars = {
-    hostname            = "${each.key}"
+    hostname = "${each.key}"
   }
 }
 
@@ -44,7 +58,7 @@ resource "libvirt_domain" "rhel9" {
   cloudinit = libvirt_cloudinit_disk.commoninit[each.key].id
 
   network_interface {
-    network_name   = "default"
+    network_name   = "terraform_local_dns"
     wait_for_lease = true
     hostname       = each.value.fqdn
   }
