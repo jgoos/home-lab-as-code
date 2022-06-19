@@ -8,3 +8,6 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - ${ssh_pub_key_content}
+runcmd:
+  - /usr/bin/growpart /dev/vda 2
+  - pvresize /dev/vda2
