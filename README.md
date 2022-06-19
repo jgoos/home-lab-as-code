@@ -37,3 +37,18 @@ $ sudo virsh net-dumpxml default
 ```
 
 https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/
+
+``` shell
+$ cat /etc/NetworkManager/conf.d/localdns.conf 
+[main]
+dns=dnsmasq
+```
+
+``` shell
+$ cat /etc/NetworkManager/dnsmasq.d/libvirt_dnsmasq.conf
+server=/home.arpa/192.168.123.1
+```
+
+``` shell
+sudo systemctl restart NetworkManager
+```
