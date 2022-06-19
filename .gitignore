@@ -1,7 +1,7 @@
 iso-files/*.iso
 
-rhel9/builds/
-rhel8/builds/
+packer/rhel9/builds/
+packer/rhel8/builds/
 
 # Created by https://www.toptal.com/developers/gitignore/api/terraform,packer
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform,packer
