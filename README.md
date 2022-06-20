@@ -9,7 +9,7 @@ The code in this repository will:
 
 ## Generate and download content
 ### Download ISO files
-Download the needed rhel iso files and put them in the `iso-files` directory.
+Download the needed rhel iso files and put them in the `iso-files` directory.  
 (check the rhel8.pkr.hcl and rhel9.pkr.hcl packer config files what iso files are needed).
 
 ### Build packer images
@@ -26,7 +26,7 @@ $ packer build .
 
 ## Configure libvirt
 
-The libvirt configuration is based on the following instructions: [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/)
+The libvirt configuration is based on the following instructions: [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/).  
 This configuration uses `home.arpa` for the domain name. (see [rfc8375](https://datatracker.ietf.org/doc/html/rfc8375)).
 
 ### Edit libvirt local domain
