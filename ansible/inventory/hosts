@@ -1,0 +1,10 @@
+[automation_controllers]
+controlnode1.home.arpa
+controlnode2.home.arpa
+
+[execution_nodes]
+execnode1.home.arpa
+execnode2.home.arpa
+
+[database_node]
+databasenode.home.arpa
