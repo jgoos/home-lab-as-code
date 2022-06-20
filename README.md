@@ -1,7 +1,7 @@
-# Infrastructure As Code
+# Home Lab As Code
 
 The code in this repository will:
-- generate `cloud-init` ready rhel images for rhel8 and rhel9 (or other rhel based distributions).
+- generate [`cloud-init`](https://cloud-init.io/) ready rhel images for rhel8 and rhel9 (or other rhel based distributions).
 - automates the provisioning of virtual machines via terraform.
 - the vm's are resolvable via dns from the local machine.
 
@@ -27,7 +27,7 @@ $ packer build .
 ## Configure libvirt
 
 Based on the following instructions: [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/)
-This configuration uses `home.arpa` for the domain name (https://datatracker.ietf.org/doc/html/rfc8375).
+This configuration uses `home.arpa` for the domain name. (see [rfc8375](https://datatracker.ietf.org/doc/html/rfc8375)).
 
 ### Edit libvirt local domain
 
