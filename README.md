@@ -1,6 +1,13 @@
 # Infrastructure As Code
 
-## Content
+The code in this repository will:
+- generate `cloud-init` ready rhel images for rhel8 and rhel9 (or other rhel based distributions).
+- automates the provisioning of virtual machines via terraform.
+- the vm's are resolvable via dns from the local machine.
+
+> Tested on `Red Hat Enterprise Linux release 9.0 (Plow)`
+
+## Generate and download content
 ### Download ISO files
 Download the needed rhel iso files and put them in the `iso-files` directory.
 (check the rhel8.pkr.hcl and rhel9.pkr.hcl packer config files what iso files are needed).
