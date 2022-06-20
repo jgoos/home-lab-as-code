@@ -1,17 +1,3 @@
-resource "libvirt_network" "terraform_local_dns" {
-  name      = "terraform_local_dns"
-  mode      = "nat"
-  domain    = var.local_domain
-  addresses = ["192.168.123.0/24"]
-  dhcp {
-    enabled = true
-  }
-
-  dns {
-    local_only = true
-  }
-}
-
 resource "libvirt_volume" "rhel9" {
   name   = "rhel9"
   source = "../packer/rhel9/builds/packer-rhel-9-x86_64"
@@ -28,8 +14,8 @@ data "template_file" "user_data" {
   for_each = var.vm
   template = file("${path.module}/cloud_init_user_data.tmpl")
   vars = {
-    hostname            = "${each.key}"
-    host_fqdn           = "${each.value.fqdn}"
+    hostname            = "${each.value.hostname}"
+    host_fqdn           = "${each.value.hostname}.${var.local_domain}"
     cloud_user          = "${var.cloud_user}"
     ssh_pub_key_content = file("~/.ssh/${var.ssh_public_key}")
   }
@@ -52,15 +38,15 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 
 resource "libvirt_domain" "rhel9" {
   for_each  = var.vm
-  name      = each.key
+  name      = "${each.key}.${var.local_domain}"
   memory    = each.value.memory
   vcpu      = each.value.cpu
   cloudinit = libvirt_cloudinit_disk.commoninit[each.key].id
 
   network_interface {
-    network_name   = "terraform_local_dns"
+    network_name   = "default"
     wait_for_lease = true
-    hostname       = each.value.fqdn
+    hostname       = "${each.value.hostname}.${var.local_domain}"
   }
 
   cpu {
