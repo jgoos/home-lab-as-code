@@ -39,6 +39,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 resource "libvirt_domain" "rhel9" {
   for_each  = var.vm
   name      = "${each.key}.${var.local_domain}"
+  description = "Managed by Terraform"
   memory    = each.value.memory
   vcpu      = each.value.cpu
   cloudinit = libvirt_cloudinit_disk.commoninit[each.key].id
