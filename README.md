@@ -1,12 +1,30 @@
-# rhel-packer-builds
+# Infrastructure As Code
+
+## Content
+### Download ISO files
+Download the needed rhel iso files and put them in the `iso-files` directory.
+(check the rhel8.pkr.hcl and rhel9.pkr.hcl packer config files what iso files are needed).
+
+### Build packer images
 
 ``` shell
-packer init .
+$ cd packer/<rhel_version>
+$ packer init .
 ```
 
-Edit libvirt local domain
+``` shell
+$ cd packer/<rhel_version>
+$ packer build .
+```
 
-sudo virsh net-dumpxml default
+## Configure libvirt
+
+Based on the following instructions: [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/)
+This configuration uses `home.arpa` for the domain name (https://datatracker.ietf.org/doc/html/rfc8375).
+
+### Edit libvirt local domain
+
+Check the current network configuration of the default network.
 
 ``` shell
 $ sudo virsh net-dumpxml default
@@ -32,11 +50,19 @@ $ sudo virsh net-dumpxml default
 </network>
 ```
 
+Make sure this contains the following configuration:
+
 ``` xml
 <domain name='home.arpa' localOnly='yes'/>
 ```
 
-https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/
+Configure via:
+
+``` shell
+virsh net-edit default
+```
+
+### Configure dns masquerading
 
 ``` shell
 $ cat /etc/NetworkManager/conf.d/localdns.conf 
@@ -51,4 +77,12 @@ server=/home.arpa/192.168.123.1
 
 ``` shell
 sudo systemctl restart NetworkManager
+```
+
+## Configure terraform
+Configure the required virtual machines in `vars.tf`.
+
+``` shell
+$ terraform plan
+$ terraform apply
 ```
