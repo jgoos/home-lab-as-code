@@ -8,6 +8,7 @@ source "qemu" "rhel8" {
   iso_checksum           = "sha256:c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8"
   cd_label               = "cidata"
   cd_files               = ["config/ks-el8.cfg"]
+  communicator           = "none"
   output_directory       = "builds"
   shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
   disk_size              = "20G"
