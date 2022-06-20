@@ -1,0 +1,10 @@
+---
+- name: Stop Virtual Machines
+  hosts: all
+  connection: local
+  tasks:
+    - name: Start a VM
+      community.libvirt.virt:
+        name: "{{ inventory_hostname }}"
+        state: shutdown
+      delegate_to: localhost

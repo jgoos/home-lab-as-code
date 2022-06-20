@@ -1,0 +1,10 @@
+---
+- name: Start Virtual Machines
+  hosts: all
+  connection: local
+  tasks:
+    - name: Start a VM
+      community.libvirt.virt:
+        name: "{{ inventory_hostname }}"
+        state: running
+      delegate_to: localhost
