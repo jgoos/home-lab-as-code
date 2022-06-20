@@ -7,7 +7,7 @@ Download the needed rhel iso files and put them in the `iso-files` directory.
 
 ### Build packer images
 
-``` shell
+``` bash
 $ cd packer/<rhel_version>
 $ packer init .
 ```
