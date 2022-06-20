@@ -37,12 +37,12 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 }
 
 resource "libvirt_domain" "rhel" {
-  for_each  = var.vm
-  name      = "${each.key}.${var.local_domain}"
+  for_each    = var.vm
+  name        = "${each.key}.${var.local_domain}"
   description = "Managed by Terraform"
-  memory    = each.value.memory
-  vcpu      = each.value.cpu
-  cloudinit = libvirt_cloudinit_disk.commoninit[each.key].id
+  memory      = each.value.memory
+  vcpu        = each.value.cpu
+  cloudinit   = libvirt_cloudinit_disk.commoninit[each.key].id
 
   network_interface {
     network_name   = "default"

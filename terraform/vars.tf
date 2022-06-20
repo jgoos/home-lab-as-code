@@ -1,20 +1,56 @@
-variable "workers_count" {
-  default = "3"
+variable "rhel_version" {
+  default = "9"
+  type    = string
 }
 
-locals {
-  vms = {
-    execnode1 = {
-      subnet = "west"
-      systemdisk = "10"
-    }
+variable "ssh_public_key" {
+  default = "id_ed25519.pub"
+  type    = string
+}
+
+variable "cloud_user" {
+  default = "ansible"
+  type    = string
+}
+
+variable "local_domain" {
+  default = "home.arpa"
+  type    = string
+}
+
+variable "vm" {
+  description = "Virtual Machines"
+  type        = map(any)
+  default = {
     controlnode1 = {
-      subnet = "west"
-      systemdisk = "10"
+      hostname = "controlnode1"
+      storage  = "40"
+      memory   = "16384"
+      cpu      = "4"
+    }
+    controlnode2 = {
+      hostname = "controlnode2"
+      storage  = "40"
+      memory   = "16384"
+      cpu      = "4"
+    }
+    execnode1 = {
+      hostname = "execnode1"
+      storage  = "40"
+      memory   = "16384"
+      cpu      = "4"
+    }
+    execnode2 = {
+      hostname = "execnode2"
+      storage  = "40"
+      memory   = "16384"
+      cpu      = "4"
     }
     databasenode = {
-      subnet = "east"
-      systemdisk = "10"
+      hostname = "databasenode"
+      storage  = "40"
+      memory   = "16384"
+      cpu      = "4"
     }
   }
 }
