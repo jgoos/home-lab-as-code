@@ -1,13 +1,13 @@
-resource "libvirt_volume" "rhel9" {
-  name   = "rhel9"
-  source = "../packer/rhel9/builds/packer-rhel-9-x86_64"
+resource "libvirt_volume" "rhel" {
+  name   = "rhel"
+  source = "../packer/rhel${var.rhel_version}/builds/packer-rhel-${var.rhel_version}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {
   for_each       = var.vm
   name           = "${each.key}.qcow2"
   size           = each.value.storage * 1024 * 1024 * 1024 # convert GB to Bytes
-  base_volume_id = libvirt_volume.rhel9.id
+  base_volume_id = libvirt_volume.rhel.id
 }
 
 data "template_file" "user_data" {
@@ -36,7 +36,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
   meta_data = data.template_file.meta_data[each.key].rendered
 }
 
-resource "libvirt_domain" "rhel9" {
+resource "libvirt_domain" "rhel" {
   for_each  = var.vm
   name      = "${each.key}.${var.local_domain}"
   description = "Managed by Terraform"
