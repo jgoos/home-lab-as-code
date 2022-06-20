@@ -6,10 +6,11 @@ source "qemu" "rhel8" {
   ]
   iso_url                = "../../iso-files/rhel-8.6-x86_64-dvd.iso"
   iso_checksum           = "sha256:c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8"
+  cd_label               = "cidata"
   cd_files               = ["config/ks-el8.cfg"]
   output_directory       = "builds"
   shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
-  disk_size              = "10G"
+  disk_size              = "20G"
   memory                 = "4096"
   cpus                   = "1"
   format                 = "qcow2"
@@ -17,7 +18,7 @@ source "qemu" "rhel8" {
   ssh_password           = "vagrant"
   ssh_username           = "vagrant"
   ssh_timeout            = "20m"
-  ssh_handshake_attempts = "15"
+  ssh_handshake_attempts = "20"
   headless               = true
   vm_name                = "packer-rhel-8-x86_64"
   net_device             = "virtio-net"
