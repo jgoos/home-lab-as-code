@@ -1,4 +1,4 @@
-iso-files/*.iso
+packer/iso-files/*.iso
 
 packer/rhel9/builds/
 packer/rhel8/builds/
