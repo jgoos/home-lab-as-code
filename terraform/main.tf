@@ -28,8 +28,8 @@ data "template_file" "user_data" {
   for_each = var.vms
   template = file("${path.module}/cloud_init_user_data.tmpl")
   vars = {
-    hostname            = "${each.value.hostname}"
-    host_fqdn           = "${each.value.hostname}.${var.local_domain}"
+    hostname            = "${each.key}"
+    host_fqdn           = "${each.key}.${var.local_domain}"
     cloud_user          = "${var.cloud_user}"
     ssh_pub_key_content = file("~/.ssh/${var.ssh_public_key}")
   }
@@ -61,7 +61,7 @@ resource "libvirt_domain" "rhel" {
   network_interface {
     network_name   = "default"
     wait_for_lease = true
-    hostname       = "${each.value.hostname}.${var.local_domain}"
+    hostname       = "${each.key}.${var.local_domain}"
   }
 
   cpu {
@@ -75,9 +75,3 @@ resource "libvirt_domain" "rhel" {
     type = "vnc"
   }
 }
-
-#output "all_ips" {
-#  value = { for vm_item in keys(var.vms) : vm_item => libvirt_domain.rhel[vm].network_interface.0.address0 }
-#  #value = { for vm_item in keys(var.vms) : vm_item => module.kvm_instances[vm].ips }
-#  #value = "${libvirt_domain.rhel.network_interface.*.addresses.0}"
-#}
