@@ -87,9 +87,10 @@ sudo systemctl restart NetworkManager
 ```
 
 ## Configure terraform
-Configure the required virtual machines in `vars.tf`.
+Configure the required virtual machines and sizing in `variables.tf`.
 
 ``` shell
+$ cd terraform
 $ terraform plan
 $ terraform apply
 ```
