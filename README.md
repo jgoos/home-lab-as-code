@@ -79,7 +79,7 @@ dns=dnsmasq
 
 ``` shell
 $ cat /etc/NetworkManager/dnsmasq.d/libvirt_dnsmasq.conf
-server=/home.arpa/192.168.123.1
+server=/home.arpa/192.168.122.1
 ```
 
 ``` shell
