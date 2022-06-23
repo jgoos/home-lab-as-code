@@ -1,20 +1,13 @@
-# rhel-packer-builds
+# Build Terraform
+
+Steps:
+
+- Install [terraform](https://www.terraform.io/).
+- Edit the `variables.tf`.
+- terraform init, plan and apply the configuration.
 
 ``` shell
-packer init .
-```
-
-cloud_init.cfg example:
-
-``` 
-#cloud-config
-hostname: <hostname>
-fqdn: <fqdn>
-users:
-  - name: <username>
-    groups: sudo
-    shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-      - <put ssh public key here>
+terraform init
+terraform plan
+terraform apply
 ```
