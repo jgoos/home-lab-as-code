@@ -1,32 +1,30 @@
 # Home Lab As Code
 
 The code in this repository will:
+
 - generate [`cloud-init`](https://cloud-init.io/) ready rhel images for rhel8 and rhel9 (or other rhel based distributions).
 - automates the provisioning of virtual machines via terraform.
-- the vm's are resolvable via dns from the local machine.
+- the dnsmasq configuration wil make the virtual machines resolvable via from the local machine.
 
 > Tested on `Red Hat Enterprise Linux release 9.0 (Plow)`
 
 ## Generate and download content
 ### Download ISO files
-Download the needed rhel iso files and put them in the `iso-files` directory.  
+Download the needed rhel iso files and put them in the `packer/iso-files` directory.  
 (check the rhel8.pkr.hcl and rhel9.pkr.hcl packer config files what iso files are needed).
 
 ### Build packer images
 
-``` bash
-$ cd packer/<rhel_version>
-$ packer init .
-```
-
 ``` shell
 $ cd packer/<rhel_version>
+$ packer init .
 $ packer build .
 ```
 
 ## Configure libvirt
 
-The libvirt configuration is based on the following instructions: [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/).  
+The libvirt configuration is based on the following instructions:  
+[howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/).  
 This configuration uses `home.arpa` for the domain name. (see [rfc8375](https://datatracker.ietf.org/doc/html/rfc8375)).
 
 ### Edit libvirt local domain
@@ -86,11 +84,17 @@ server=/home.arpa/192.168.122.1
 sudo systemctl restart NetworkManager
 ```
 
-## Configure terraform
-Configure the required virtual machines and sizing in `variables.tf`.
+## Configure and use terraform
+
+Steps:
+
+- Install [terraform](https://www.terraform.io/).
+- Configure the required virtual machines and sizing in `terraform/variables.tf`.
+- terraform init, plan and apply the configuration.
 
 ``` shell
 $ cd terraform
+$ terraform init
 $ terraform plan
 $ terraform apply
 ```
