@@ -10,7 +10,7 @@ variable "ssh_public_key" {
 }
 
 variable "cloud_user" {
-  default = "ansible"
+  default = "cloud-user"
   type    = string
 }
 
