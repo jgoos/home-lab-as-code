@@ -7,8 +7,8 @@ source "qemu" "rhel8" {
   iso_url                = "../iso-files/rhel-8.6-x86_64-dvd.iso"
   iso_checksum           = "sha256:c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8"
   cd_label               = "cidata"
-  cd_files               = ["config/ks-el8.cfg"]
-  communicator           = "none"
+  cd_files               = ["config/ks-el8.cfg", "config/cloud.cfg"]
+  communicator           = "ssh"
   output_directory       = "builds"
   shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
   disk_size              = "20G"
@@ -16,8 +16,8 @@ source "qemu" "rhel8" {
   cpus                   = "1"
   format                 = "qcow2"
   accelerator            = "kvm"
-  ssh_password           = "vagrant"
-  ssh_username           = "vagrant"
+  ssh_username           = "cloud-user"
+  ssh_password           = "cloud-user"
   ssh_timeout            = "20m"
   ssh_handshake_attempts = "20"
   headless               = true
