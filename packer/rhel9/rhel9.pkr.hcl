@@ -6,9 +6,9 @@ source "qemu" "rhel9" {
   ]
   iso_url                = "../iso-files/rhel-baseos-9.0-x86_64-dvd.iso"
   iso_checksum           = "sha256:a387f3230acf87ee38707ee90d3c88f44d7bf579e6325492f562f0f1f9449e89"
-  cd_files               = ["config/ks-el9.cfg"]
-  communicator           = "none"
   cd_label               = "cidata"
+  cd_files               = ["config/ks-el9.cfg", "config/cloud.cfg"]
+  communicator           = "ssh"
   output_directory       = "builds"
   shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
   disk_size              = "20G"
@@ -16,10 +16,10 @@ source "qemu" "rhel9" {
   cpus                   = "1"
   format                 = "qcow2"
   accelerator            = "kvm"
-  ssh_password           = "vagrant"
-  ssh_username           = "vagrant"
+  ssh_username           = "cloud-user"
+  ssh_password           = "cloud-user"
   ssh_timeout            = "20m"
-  ssh_handshake_attempts = "15"
+  ssh_handshake_attempts = "20"
   headless               = true
   vm_name                = "packer-rhel-9-x86_64"
   net_device             = "virtio-net"
@@ -31,4 +31,3 @@ source "qemu" "rhel9" {
 build {
   sources = ["source.qemu.rhel9"]
 }
-
