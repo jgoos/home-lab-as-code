@@ -6,7 +6,7 @@ source "qemu" "rhel9" {
   ]
   iso_url                = "../iso-files/rhel-baseos-9.0-x86_64-dvd.iso"
   iso_checksum           = "sha256:a387f3230acf87ee38707ee90d3c88f44d7bf579e6325492f562f0f1f9449e89"
-  cd_label               = "cidata"
+  cd_label               = "CIDATA"
   cd_files               = ["config/ks-el9.cfg", "config/cloud.cfg"]
   communicator           = "ssh"
   output_directory       = "builds"
