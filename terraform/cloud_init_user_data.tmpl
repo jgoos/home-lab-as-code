@@ -6,6 +6,7 @@ users:
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    lock_passwd: false
     ssh-authorized-keys:
       - ${ssh_pub_key_content}
 runcmd:
