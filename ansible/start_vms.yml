@@ -3,7 +3,7 @@
   hosts: all
   connection: local
   tasks:
-    - name: Start a VM
+    - name: Start the Virtual Machine
       community.libvirt.virt:
         name: "{{ inventory_hostname }}"
         state: running

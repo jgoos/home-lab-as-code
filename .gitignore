@@ -64,3 +64,4 @@ terraform.rc
 # ansible
 ansible/ansible.cfg
 ansible/inventory/hosts
+ansible/group_vars/all/vault.yml
