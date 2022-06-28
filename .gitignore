@@ -1,7 +1,5 @@
 packer/iso-files/*.iso
-
-packer/rhel9/builds/
-packer/rhel8/builds/
+packer/rhel*/builds/
 
 # Created by https://www.toptal.com/developers/gitignore/api/terraform,packer
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform,packer
@@ -63,4 +61,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# End of https://www.toptal.com/developers/gitignore/api/terraform,packer
+# ansible
+ansible/ansible.cfg
+ansible/inventory/hosts

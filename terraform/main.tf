@@ -8,7 +8,6 @@ terraform {
 }
 
 provider "libvirt" {
-  # Configuration options
   uri = "qemu:///system"
 }
 
@@ -26,7 +25,7 @@ resource "libvirt_volume" "worker" {
 
 data "template_file" "user_data" {
   for_each = var.vms
-  template = file("${path.module}/cloud_init_user_data.tmpl")
+  template = file("${path.module}/templates/cloud_init_user_data.tftpl")
   vars = {
     hostname            = "${each.key}"
     host_fqdn           = "${each.key}.${var.local_domain}"
@@ -37,7 +36,7 @@ data "template_file" "user_data" {
 
 data "template_file" "meta_data" {
   for_each = var.vms
-  template = file("${path.module}/cloud_init_meta_data.tmpl")
+  template = file("${path.module}/templates/cloud_init_meta_data.tftpl")
   vars = {
     hostname = "${each.key}"
   }
@@ -74,4 +73,26 @@ resource "libvirt_domain" "rhel" {
   graphics {
     type = "vnc"
   }
+}
+
+resource "local_file" "ansible_inventory_file" {
+  content = templatefile("${path.module}/templates/ansible_inventory.tftpl",
+    {
+      provisioned_machines   = var.vms
+      rhel_version = var.rhel_version
+      local_domain = var.local_domain
+    }
+  )
+  filename        = "${path.module}/../ansible/inventory/hosts"
+  file_permission = 640
+}
+
+resource "local_file" "ansible_config_file" {
+  content = templatefile("${path.module}/templates/ansible_cfg.tftpl",
+    {
+      ansible_user = var.cloud_user
+    }
+  )
+  filename        = "${path.module}/../ansible/ansible.cfg"
+  file_permission = 640
 }
