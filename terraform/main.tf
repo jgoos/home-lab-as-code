@@ -23,30 +23,22 @@ resource "libvirt_volume" "worker" {
   base_volume_id = libvirt_volume.rhel.id
 }
 
-data "template_file" "user_data" {
-  for_each = var.vms
-  template = file("${path.module}/templates/cloud_init_user_data.tftpl")
-  vars = {
-    hostname            = "${each.key}"
-    host_fqdn           = "${each.key}.${var.local_domain}"
-    cloud_user          = "${var.cloud_user}"
-    ssh_pub_key_content = file("~/.ssh/${var.ssh_public_key}")
-  }
-}
-
-data "template_file" "meta_data" {
-  for_each = var.vms
-  template = file("${path.module}/templates/cloud_init_meta_data.tftpl")
-  vars = {
-    hostname = "${each.key}"
-  }
-}
-
 resource "libvirt_cloudinit_disk" "commoninit" {
-  for_each  = var.vms
-  name      = "${each.key}cloud-init.iso"
-  user_data = data.template_file.user_data[each.key].rendered
-  meta_data = data.template_file.meta_data[each.key].rendered
+  for_each = var.vms
+  name     = "${each.key}cloud-init.iso"
+  meta_data = templatefile("${path.module}/templates/cloud_init_meta_data.tftpl",
+    {
+      hostname = "${each.key}"
+    }
+  )
+  user_data = templatefile("${path.module}/templates/cloud_init_user_data.tftpl",
+    {
+      hostname            = "${each.key}"
+      host_fqdn           = "${each.key}.${var.local_domain}"
+      cloud_user          = "${var.cloud_user}"
+      ssh_pub_key_content = file("~/.ssh/${var.ssh_public_key}")
+    }
+  )
 }
 
 resource "libvirt_domain" "rhel" {
@@ -56,6 +48,9 @@ resource "libvirt_domain" "rhel" {
   memory      = each.value.memory
   vcpu        = each.value.cpu
   cloudinit   = libvirt_cloudinit_disk.commoninit[each.key].id
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${each.key}.${var.local_domain}"
+  }
 
   network_interface {
     network_name   = "default"
@@ -78,9 +73,9 @@ resource "libvirt_domain" "rhel" {
 resource "local_file" "ansible_inventory_file" {
   content = templatefile("${path.module}/templates/ansible_inventory.tftpl",
     {
-      provisioned_machines   = var.vms
-      rhel_version = var.rhel_version
-      local_domain = var.local_domain
+      provisioned_machines = var.vms
+      rhel_version         = var.rhel_version
+      local_domain         = var.local_domain
     }
   )
   filename        = "${path.module}/../ansible/inventory/hosts"
