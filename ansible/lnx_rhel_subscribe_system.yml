@@ -4,7 +4,7 @@
   become: true
   tasks:
     - name: Register with activationkey and consume subscription
-      redhat_subscription:
+      community.general.redhat_subscription:
         state: present
         activationkey: "{{ vault_activationkey }}"
         org_id: "{{ vault_org_id }}"

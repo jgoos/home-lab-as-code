@@ -1,0 +1,35 @@
+---
+- name: Install & Configure Tailscale
+  hosts: all
+  become: true
+  tasks:
+    - name: Import gpg key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://pkgs.tailscale.com/stable/rhel/8/repo.gpg
+
+    - name: Add repository
+      ansible.builtin.yum_repository:
+        name: tailscale-stable
+        description: "Tailscale stable"
+        file: tailscale
+        baseurl: https://pkgs.tailscale.com/stable/rhel/8/$basearch
+        gpgkey: https://pkgs.tailscale.com/stable/rhel/8/repo.gpg
+        gpgcheck: false
+        repo_gpgcheck: true
+        enabled: true
+
+    - name: Install package
+      yum:
+        name: tailscale
+        state: latest
+
+    - name: Enable service
+      systemd:
+        name: tailscaled
+        state: started
+        enabled: true
+
+    - name: Connect system
+      command: "tailscale up --authkey {{ vault_tailscale_auth_key }}"
+      no_log: true

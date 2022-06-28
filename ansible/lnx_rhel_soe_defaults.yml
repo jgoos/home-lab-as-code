@@ -1,0 +1,15 @@
+---
+- name: Default Standard Operating Environment (SOE) Configuration.
+  hosts: all
+  become: true
+  tasks:
+    - name: Enable Firewalld
+      systemd:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Enable SELinux
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing

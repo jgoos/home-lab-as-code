@@ -1,0 +1,15 @@
+---
+- name: Decommission System
+  hosts: all
+  become: true
+  tasks:
+    - name: Remove subscriptions
+      community.general.redhat_subscription:
+        state: absent
+    - name: Remove subscriptions
+      ansible.builtin.stat:
+        path: /usr/bin/tailscale
+      register: check_tailscale
+    - name: Logout of tailscale
+      ansible.builtin.command: tailscale logout
+      when: check_tailscale.stat.islnk is defined

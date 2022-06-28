@@ -12,7 +12,7 @@ ansible-galaxy install -r collections/requirements.yml
 
 ## Vault
 
-To protect sensitive variables.
+Create a vault to protect sensitive variables.
 
 ### Create the vault file
 
@@ -21,6 +21,7 @@ To protect sensitive variables.
 ``` yaml
 vault_activationkey: <activation key name>
 vault_org_id: <organization id>
+vault_tailscale_auth_key: <tailscale auth key>
 ```
 
 ### Encrypt the vault file
@@ -37,7 +38,7 @@ Encryption successful
 ### Using
 
 ``` shell
-ansible-playbook subscribe_system.yml --ask-vault-pass
+ansible-playbook <playbook_name> --ask-vault-pass
 ```
 
 ### Red Hat subscription & activation keys
@@ -45,3 +46,7 @@ ansible-playbook subscribe_system.yml --ask-vault-pass
 > **note:** Get a Red Hat developer subscription via: https://developers.redhat.com
 
 Create an activation key. https://access.redhat.com/management/activation_keys
+
+### Tailscale
+
+For authkey usage see: https://tailscale.com/kb/1085/auth-keys/
