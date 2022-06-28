@@ -1,0 +1,5 @@
+# Managed by terraform
+[all]
+%{ for key, value in provisioned_machines ~}
+${ key }.${ local_domain }
+%{ endfor ~}

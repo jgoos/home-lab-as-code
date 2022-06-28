@@ -1,5 +1,6 @@
+# Managed by terraform
 [defaults]
 inventory = inventory/hosts
 
-remote_user = ansible
+remote_user = ${ ansible_user }
 host_key_checking = False
