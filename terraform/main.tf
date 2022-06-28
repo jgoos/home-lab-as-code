@@ -13,13 +13,13 @@ provider "libvirt" {
 
 resource "libvirt_volume" "rhel" {
   name   = "rhel"
-  source = "../packer/rhel${var.rhel_version}/builds/packer-rhel-${var.rhel_version}-x86_64"
+  source = "../packer/builds/packer-rhel-${var.rhel_version}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {
   for_each       = var.vms
   name           = "${each.key}.qcow2"
-  size           = each.value.storage * 1024 * 1024 * 1024 # convert GB to Bytes
+  size           = each.value.storage * pow(1024, 3) # convert GB to Bytes
   base_volume_id = libvirt_volume.rhel.id
 }
 
