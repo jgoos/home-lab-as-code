@@ -12,15 +12,16 @@ provider "libvirt" {
 }
 
 resource "libvirt_volume" "rhel" {
-  name   = "rhel"
-  source = "../packer/builds/packer-rhel-${var.rhel_version}-x86_64"
+  for_each = var.vms
+  name   = "rhel${each.value.rhel_version}"
+  source = "../packer/builds/packer-rhel-${each.value.rhel_version}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {
   for_each       = var.vms
   name           = "${each.key}.qcow2"
   size           = each.value.storage * pow(1024, 3) # convert GB to Bytes
-  base_volume_id = libvirt_volume.rhel.id
+  base_volume_id = libvirt_volume.rhel[each.key].id
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
@@ -48,6 +49,7 @@ resource "libvirt_domain" "rhel" {
   memory      = each.value.memory
   vcpu        = each.value.cpu
   cloudinit   = libvirt_cloudinit_disk.commoninit[each.key].id
+  running     = true
   provisioner "local-exec" {
     command = "ssh-keygen -R ${each.key}.${var.local_domain}"
   }
@@ -74,7 +76,6 @@ resource "local_file" "ansible_inventory_file" {
   content = templatefile("${path.module}/templates/ansible_inventory.tftpl",
     {
       provisioned_machines = var.vms
-      rhel_version         = var.rhel_version
       local_domain         = var.local_domain
     }
   )

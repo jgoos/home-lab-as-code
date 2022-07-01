@@ -1,7 +1,6 @@
-variable "rhel_version" {
-  description = "RHEL major version"
-  default     = "8"
-  type        = string
+variable "vms" {
+  description = "Virtual Machines"
+  type        = map(any)
 }
 
 variable "ssh_public_key" {
@@ -17,32 +16,4 @@ variable "cloud_user" {
 variable "local_domain" {
   default = "home.arpa"
   type    = string
-}
-
-variable "vms" {
-  description = "Virtual Machines"
-  type        = map(any)
-  default = {
-    tower385 = {
-      storage = "20"
-      memory  = "2048"
-      cpu     = "1"
-      rhel_version = "9"
-      group = "ansible_servers"
-    }
-    image-builder = {
-      storage = "20"
-      memory  = "2048"
-      cpu     = "1"
-      rhel_version = "8"
-      group = "image_servers"
-    }
-    system1 = {
-      storage = "20"
-      memory  = "2048"
-      cpu     = "1"
-      rhel_version = "8"
-      group = "image_servers"
-    }
-  }
 }
