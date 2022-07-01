@@ -13,8 +13,8 @@ provider "libvirt" {
 
 resource "libvirt_volume" "rhel" {
   for_each = var.vms
-  name   = "rhel${each.value.rhel_version}"
-  source = "../packer/builds/packer-rhel-${each.value.rhel_version}-x86_64"
+  name     = "rhel${each.value.rhel_version}-${basename(path.cwd)}"
+  source   = "../packer/builds/packer-rhel-${each.value.rhel_version}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {

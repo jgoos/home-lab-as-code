@@ -19,7 +19,7 @@ To build all versions in parralel.
 $ packer build .
 ```
 
-To build specific version.
+To build a specific version.
 
 ``` shell
 $ packer build <template_name>
