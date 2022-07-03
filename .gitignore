@@ -1,5 +1,4 @@
 packer/iso-files/*.iso
-packer/builds/
 
 # Created by https://www.toptal.com/developers/gitignore/api/terraform,packer
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform,packer

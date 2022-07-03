@@ -7,6 +7,7 @@ terraform {
   }
 }
 
+# create ansible groups with input from virtual machine specs in tfvars
 locals {
   ansible_sorted_groups = { for k, v in var.vms :
     coalesce(v.group, "ungrouped") => k...
@@ -20,7 +21,7 @@ provider "libvirt" {
 resource "libvirt_volume" "rhel" {
   for_each = var.vms
   name     = "rhel${each.value.rhel_version}-${basename(path.cwd)}"
-  source   = "../packer/builds/packer-rhel-${each.value.rhel_version}-x86_64"
+  source   = "../packer/output-rhel${each.value.rhel_version}/packer-rhel-${each.value.rhel_version}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {

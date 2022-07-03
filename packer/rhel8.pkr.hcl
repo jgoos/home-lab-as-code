@@ -9,10 +9,9 @@ source "qemu" "rhel8" {
   cd_label               = "CIDATA"
   cd_files               = ["config/ks-el8.cfg", "config/cloud.cfg"]
   communicator           = "ssh"
-  output_directory       = "builds"
   shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
-  disk_size              = "20G"
-  memory                 = "4096"
+  disk_size              = "10G"
+  memory                 = "1024"
   cpus                   = "1"
   format                 = "qcow2"
   accelerator            = "kvm"
