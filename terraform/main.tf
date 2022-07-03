@@ -7,6 +7,12 @@ terraform {
   }
 }
 
+locals {
+  ansible_sorted_groups = { for k, v in var.vms :
+    coalesce(v.group, "ungrouped") => k...
+  }
+}
+
 provider "libvirt" {
   uri = "qemu:///system"
 }
@@ -75,8 +81,8 @@ resource "libvirt_domain" "rhel" {
 resource "local_file" "ansible_inventory_file" {
   content = templatefile("${path.module}/templates/ansible_inventory.tftpl",
     {
-      provisioned_machines = var.vms
-      local_domain         = var.local_domain
+      ansible_groups = local.ansible_sorted_groups
+      local_domain   = var.local_domain
     }
   )
   filename        = "${path.module}/../ansible/inventory/hosts"

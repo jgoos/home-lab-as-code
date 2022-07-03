@@ -1,5 +1,8 @@
 # Managed by terraform
-[all]
-%{ for key, value in provisioned_machines ~}
-${ key }.${ local_domain }
+%{ for group_name, host_list in ansible_groups ~}
+[${ group_name }]
+%{ for host_name in host_list ~}
+${ host_name }.${local_domain}
+%{ endfor ~}
+
 %{ endfor ~}
