@@ -1,0 +1,62 @@
+---
+- name: Dynamicly configure Swap
+  hosts: all
+  become: true
+  vars:
+    swap_vg_name: "rhel"
+    swap_lv_name: "swap"
+    change_swap: false
+  tasks:
+      #
+      # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_storage_devices/getting-started-with-swap_managing-storage-devices
+      #
+      # ⩽ 2 GB	2 times the amount of RAM
+    - name: Memory less or equal to 2GB ram
+      set_fact:
+        swap_memory_size_gb: "{{ ( ansible_memtotal_mb * 2 ) / 1024 | round }}"
+        change_swap: true
+      when: 
+        - ansible_memtotal_mb <= 2048
+        - ansible_swaptotal_mb >= ( ansible_memtotal_mb * 2 )
+
+      # > 2 GB – 8 GB	Equal to the amount of RAM
+    - name: Memory less or equal to 8GB ram
+      set_fact:
+        swap_memory_size_gb: "4"
+        change_swap: true
+      when: 
+        - ansible_memtotal_mb > 2048
+        - ansible_memtotal_mb <= 8192
+        - ansible_swaptotal_mb >= ansible_memtotal_mb
+
+      # > 8 GB – 64 GB	At least 4 GB
+    - name: Memory bigger than 8GB 
+      set_fact:
+        swap_memory_size_gb: "4"
+        change_swap: true
+      when: 
+        - ansible_memtotal_mb > 8192
+        - ansible_swaptotal_mb <= 4094 
+
+    - name: Resize Swap
+      block:
+        - name: Swap OFF
+          ansible.builtin.command: "swapoff -a"
+
+        - name: Resize Swap
+          community.general.lvol:
+            vg: "{{ swap_vg_name }}"
+            lv: "{{ swap_lv_name }}"
+            size: "{{ swap_memory_size_gb }}g"
+            shrink: no
+            state: present
+            active: true
+          register: resize_swap
+
+        - name: Make Swap
+          ansible.builtin.command: "mkswap /dev/mapper/{{ swap_vg_name }}-{{ swap_lv_name }}"
+          when: resize_swap.changed
+
+        - name: Swap ON
+          ansible.builtin.command: "swapon -a"
+      when: change_swap
