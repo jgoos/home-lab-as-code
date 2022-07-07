@@ -29,4 +29,8 @@ source "qemu" "rhel7" {
 
 build {
   sources = ["source.qemu.rhel7"]
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
+    script          = "config/cleanup.sh"
+  }
 }
