@@ -29,8 +29,7 @@ source "qemu" "rhel8" {
 
 build {
   sources = ["source.qemu.rhel8"]
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
-    script          = "config/cleanup.sh"
+  post-processor "shell-local" {
+    inline = ["virt-sysprep -a output-rhel8/packer-rhel-8-x86_64 --operations all,-lvm-uuids,-user-account,-firewall-rules,-fs-uuids,-flag-reconfiguration,-machine-id --scrub /etc/machine-id"]
   }
 }

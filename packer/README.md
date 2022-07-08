@@ -1,8 +1,14 @@
 # Packer
 
-Install packer: https://www.packer.io/
+## Requirements
 
-## Download iso files
+steps:
+
+  - install [packer](https://www.packer.io/)
+  - `dnf install -y guestfs-tools`
+  - download the required iso files
+
+### Download iso files
 
 Check the `rhel<version>.pkr.hcl` packer files for what iso files are needed.
 Download en put these in the iso-files directory.
