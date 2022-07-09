@@ -12,3 +12,4 @@ users:
 runcmd:
   - /usr/bin/growpart /dev/vda 2
   - pvresize /dev/vda2
+  - systemd-machine-id-setup
