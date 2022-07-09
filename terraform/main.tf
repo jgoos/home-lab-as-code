@@ -12,23 +12,27 @@ locals {
   ansible_sorted_groups = { for k, v in var.vms :
     coalesce(v.group, "ungrouped") => k...
   }
+  rhel_versions_in_tfvars = toset([ for k, v in var.vms :
+    v.rhel_version
+  ])
 }
+
 
 provider "libvirt" {
   uri = "qemu:///system"
 }
 
 resource "libvirt_volume" "rhel" {
-  for_each = var.vms
-  name     = "rhel${each.value.rhel_version}-${basename(path.cwd)}"
-  source   = "../packer/output-rhel${each.value.rhel_version}/packer-rhel-${each.value.rhel_version}-x86_64"
+  for_each = local.rhel_versions_in_tfvars
+  name     = "rhel${each.key}"
+  source   = "../packer/output-rhel${each.key}/packer-rhel-${each.key}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {
   for_each       = var.vms
   name           = "${each.key}.qcow2"
   size           = each.value.storage * pow(1024, 3) # convert GB to Bytes
-  base_volume_id = libvirt_volume.rhel[each.key].id
+  base_volume_id = libvirt_volume.rhel[each.value.rhel_version].id
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
@@ -57,6 +61,7 @@ resource "libvirt_domain" "rhel" {
   vcpu        = each.value.cpu
   cloudinit   = libvirt_cloudinit_disk.commoninit[each.key].id
   running     = true
+
   provisioner "local-exec" {
     command = "ssh-keygen -R ${each.key}.${var.local_domain}"
   }
@@ -64,7 +69,6 @@ resource "libvirt_domain" "rhel" {
   network_interface {
     network_name   = "default"
     wait_for_lease = true
-    hostname       = "${each.key}.${var.local_domain}"
   }
 
   cpu {
