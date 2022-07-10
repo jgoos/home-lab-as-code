@@ -30,6 +30,6 @@ source "qemu" "rhel7" {
 build {
   sources = ["source.qemu.rhel7"]
   post-processor "shell-local" {
-    inline = ["virt-sysprep -a output-rhel7/packer-rhel-7-x86_64 --operations all,-lvm-uuids,-user-account,-firewall-rules,-fs-uuids,-flag-reconfiguration,-machine-id --scrub /etc/machine-id"]
+    inline = ["virt-sysprep -a output-rhel7/packer-rhel-7-x86_64 --operations defaults,-lvm-uuids --run-command '> /etc/machine-id'"]
   }
 }
