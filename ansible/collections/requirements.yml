@@ -1,5 +1,6 @@
 ---
 collections:
-  - community.libvirt
-  - community.general
   - ansible.posix
+  - community.general
+  - community.general.rhsm_repository
+  - community.libvirt
