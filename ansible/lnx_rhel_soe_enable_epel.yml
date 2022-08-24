@@ -3,13 +3,28 @@
   hosts: all
   become: true
   tasks:
-    - name: Enable repository
+    - name: Enable required rhel7 repositories
       community.general.rhsm_repository:
         name: "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
         state: enabled
+      loop:
+        - "rhel-*-optional-rpms"
+        - "rhel-*-extras-rpms"
+        - "rhel-ha-for-rhel-*-server-rpms"
+      when:
+        - ansible_distribution == "RedHat"
+        - ansible_distribution_major_version == "7"
+
+    - name: Enable required rhel8 or rhel9 repository
+      community.general.rhsm_repository:
+        name: "codeready-builder-for-rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}-rpms"
+        state: enabled
+      when:
+        - ansible_distribution == "RedHat"
+        - (ansible_distribution_major_version == "8") or (ansible_distribution_major_version == "9")
 
     - name: Install EPEL rpm
       ansible.builtin.yum:
-        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version}}.noarch.rpm
         state: present
         disable_gpg_check: true
