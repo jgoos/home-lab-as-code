@@ -1,0 +1,15 @@
+---
+- name: Enable EPEL
+  hosts: all
+  become: true
+  tasks:
+    - name: Enable repository
+      community.general.rhsm_repository:
+        name: "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+        state: enabled
+
+    - name: Install EPEL rpm
+      ansible.builtin.yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        state: present
+        disable_gpg_check: true
