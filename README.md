@@ -1,39 +1,44 @@
 # Home Lab As Code
 
-The code in this repository will:
+This repository provides a way to easily create and manage virtual machines on your local machine. It uses [Packer](https://www.packer.io/) to generate `cloud-init` ready Red Hat Enterprise Linux (RHEL) images, and [Terraform](https://www.terraform.io/) to automate the provisioning of virtual machines. The included dnsmasq configuration makes the virtual machines resolvable from the local machine using the `home.arpa` domain.
 
-- generate [`cloud-init`](https://cloud-init.io/) ready rhel images for rhel8 and rhel9 (or other rhel based distributions).
-- automates the provisioning of virtual machines via terraform.
-- the dnsmasq configuration wil make the virtual machines resolvable via from the local machine.
+## Prerequisites
 
-> Tested on `Red Hat Enterprise Linux release 9.0 (Plow)`
+- Have [packer](https://www.packer.io/) installed on your system
+- Have [terraform](https://www.terraform.io/) installed on your system
+- Red Hat Enterprise Linux (RHEL) based distribution
 
-## Generate and download content
+## Downloading Content
+
 ### Download ISO files
-Download the needed rhel iso files and put them in the `packer/iso-files` directory.  
-(check the rhel8.pkr.hcl and rhel9.pkr.hcl packer config files what iso files are needed).
 
-### Build packer images
+To create the RHEL images, you'll need to download the appropriate ISO files and place them in the `packer/iso-files` directory. Check the `rhel8.pkr.hcl` and `rhel9.pkr.hcl` packer config files to see which ISO files are needed.
 
-``` shell
-$ cd packer/<rhel_version>
-$ packer init .
-$ packer build .
+### Building Packer Images
+
+To build the Packer images, follow these steps:
+
+``` bash
+cd packer/<rhel_version> 
+packer init . 
+packer build .
 ```
 
-## Configure libvirt
+## Configuring libvirt
 
 The libvirt configuration is based on the following instructions:  
 [howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain](https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/).  
 This configuration uses `home.arpa` for the domain name. (see [rfc8375](https://datatracker.ietf.org/doc/html/rfc8375)).
 
-### Edit libvirt local domain
+### Edit libvirt Local Domain
 
-Check the current network configuration of the default network.
+You'll need to configure the default libvirt network to use the `home.arpa` domain. To check the current network configuration, run the following command:
 
-``` shell
-$ sudo virsh net-dumpxml default
+``` bash
+sudo virsh net-dumpxml default
 ```
+
+Example output:
 
 ``` xml
 <network connections='1'>
@@ -55,46 +60,104 @@ $ sudo virsh net-dumpxml default
 </network>
 ```
 
-Make sure this contains the following configuration:
+Make sure the network configuration contains the following:
 
 ``` xml
 <domain name='home.arpa' localOnly='yes'/>
 ```
 
-Configure via:
+If it's not, you can edit the configuration by running the following command:
 
-``` shell
+``` bash
 virsh net-edit default
 ```
 
-### Configure dns masquerading
+### Configuring dns masquerading
 
-``` shell
-$ cat /etc/NetworkManager/conf.d/localdns.conf 
+To enable DNS masquerading, you'll need to make a few changes to your system's DNS settings. First, add the following line to `/etc/NetworkManager/conf.d/localdns.conf`:
+
+``` ini
 [main]
 dns=dnsmasq
 ```
 
-``` shell
-$ cat /etc/NetworkManager/dnsmasq.d/libvirt_dnsmasq.conf
+Then, add the following line to `/etc/NetworkManager/dnsmasq.d/libvirt_dnsmasq.conf`:
+
+``` ini
 server=/home.arpa/192.168.122.1
 ```
 
-``` shell
+Finally, restart the NetworkManager service:
+
+``` bash
 sudo systemctl restart NetworkManager
 ```
 
-## Configure and use terraform
+## Configuring and Using Terraform
 
-Steps:
+To use Terraform to manage your virtual machines, you'll need to perform a few additional steps:
 
-- Install [terraform](https://www.terraform.io/).
-- Configure the required virtual machines and sizing in `terraform/variables.tf`.
-- terraform init, plan and apply the configuration.
+- Install terraform on your system
+- Configure the required virtual machines and their sizes in the `terraform/variables.tf` file
+- Configure the virtual machines' network settings, such as IP addresses or hostnames, in the terraform configuration file.
 
-``` shell
-$ cd terraform
-$ terraform init
-$ terraform plan
-$ terraform apply
+### Initializing Terraform
+
+To set up Terraform for use with this repository, run the following commands:
+
+``` bash
+cd terraform
+terraform init
 ```
+
+### Planning Terraform
+
+To see what changes Terraform will make to your infrastructure, run:
+
+``` bash
+terraform plan
+``` bash
+
+### Applying Terraform
+
+To apply the changes, use the following command:
+
+``` bash
+terraform apply
+```
+
+### Modifying Infrastructure
+
+To make changes to the existing infrastructure, edit the `terraform/main.tf` file and then run the `terraform apply` command again.
+
+### Destroying Infrastructure
+
+To destroy the infrastructure, run:
+
+``` bash
+terraform destroy
+```
+
+### Checking the current state of the infrastructure
+
+To check the current state of the infrastructure run:
+
+``` bash
+terraform show
+```
+
+## Troubleshooting
+
+In case of issues or errors, check the following:
+
+- Make sure the appropriate versions of packer and terraform are installed.
+- Check that the ISO files are in the correct directory and that the paths in the packer config files are correct.
+- Verify that the NetworkManager service is running and properly configured.
+
+## Additional Resources
+
+- [Packer documentation](https://www.packer.io/docs)
+- [Terraform documentation](https://www.terraform.io/docs/)
+- [libvirt documentation](https://libvirt.org/docs.html)
+
+Please note that some commands and file paths may be different depending on your operating system and specific setup.
