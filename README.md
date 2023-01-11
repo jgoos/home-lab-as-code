@@ -14,7 +14,7 @@ This repository provides a way to easily create and manage virtual machines on y
 
 To create the RHEL images, you'll need to download the appropriate ISO files and place them in the `packer/iso-files` directory. Check the `rhel8.pkr.hcl` and `rhel9.pkr.hcl` packer config files to see which ISO files are needed.
 
-### Building Packer Images
+## Building Packer Images
 
 To build the Packer images, follow these steps:
 
@@ -72,7 +72,7 @@ If it's not, you can edit the configuration by running the following command:
 virsh net-edit default
 ```
 
-### Configuring dns masquerading
+## Configuring dns masquerading
 
 To enable DNS masquerading, you'll need to make a few changes to your system's DNS settings. First, add the following line to `/etc/NetworkManager/conf.d/localdns.conf`:
 
@@ -93,58 +93,23 @@ Finally, restart the NetworkManager service:
 sudo systemctl restart NetworkManager
 ```
 
-## Configuring and Using Terraform
+## Using Terraform to deploy VMs
 
-To use Terraform to manage your virtual machines, you'll need to perform a few additional steps:
+To deploy the VMs using the built images, navigate to the `terraform` directory and follow these steps:
 
-- Install terraform on your system
-- Configure the required virtual machines and their sizes in the `terraform/variables.tf` file
-- Configure the virtual machines' network settings, such as IP addresses or hostnames, in the terraform configuration file.
+### Variables
 
-### Initializing Terraform
+1. Copy `terraform.tfvars.example` to `terraform.tfvars` (or another name that ends with .tfvars)
+2. Fill out your `terraform.tfvars` file
+3. Run `terraform init` to initialize the directory that contains a Terraform configuration
+4. Run `terraform plan -var-file=terraform.tfvars` to evaluate a Terraform configuration to determine the desired state
+5. Run `terraform apply -var-file=terraform.tfvars` to carry out the planned changes to each resource
 
-To set up Terraform for use with this repository, run the following commands:
+> **note**: you can auto load the tfvars file without the `-var-file=terraform.tfvars` by putting `auto` in the name. For example: `terraform.auto.tfvars`
 
-``` bash
-cd terraform
-terraform init
-```
+## Using Ansible to provision VMs
 
-### Planning Terraform
-
-To see what changes Terraform will make to your infrastructure, run:
-
-``` bash
-terraform plan
-```
-
-### Applying Terraform
-
-To apply the changes, use the following command:
-
-``` bash
-terraform apply
-```
-
-### Modifying Infrastructure
-
-To make changes to the existing infrastructure, edit the `terraform/main.tf` file and then run the `terraform apply` command again.
-
-### Destroying Infrastructure
-
-To destroy the infrastructure, run:
-
-``` bash
-terraform destroy
-```
-
-### Checking the current state of the infrastructure
-
-To check the current state of the infrastructure run:
-
-``` bash
-terraform show
-```
+The playbooks in the `ansible` directory can be used to provision the VMs deployed by terraform. You can use `ansible-playbook` command to run the playbooks.
 
 ## Troubleshooting
 
@@ -161,3 +126,9 @@ In case of issues or errors, check the following:
 - [libvirt documentation](https://libvirt.org/docs.html)
 
 Please note that some commands and file paths may be different depending on your operating system and specific setup.
+
+## Licensing
+
+This repository is licensed under the MIT license. Refer to the [LICENSE](https://chat.openai.com/LICENSE) file for details.
+
+This project can serve as a great starting point for automating your home lab infrastructure and can be easily customized to suit your specific needs.
