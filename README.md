@@ -116,7 +116,7 @@ To see what changes Terraform will make to your infrastructure, run:
 
 ``` bash
 terraform plan
-``` bash
+```
 
 ### Applying Terraform
 
