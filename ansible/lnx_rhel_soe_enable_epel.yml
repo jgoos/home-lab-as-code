@@ -5,7 +5,7 @@
   tasks:
     - name: Enable required rhel7 repositories
       community.general.rhsm_repository:
-        name: "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+        name: "{{ item }}"
         state: enabled
       loop:
         - "rhel-*-optional-rpms"
