@@ -1,9 +1,13 @@
 # Home Lab As Code
 
-This repository provides a way to easily create and manage virtual machines on your local machine. It uses [Packer](https://www.packer.io/) to generate `cloud-init` ready Red Hat Enterprise Linux (RHEL) images, and [Terraform](https://www.terraform.io/) to automate the provisioning of virtual machines. The included dnsmasq configuration makes the virtual machines resolvable from the local machine using the `home.arpa` domain.
+This repository provides a way to easily create and manage virtual machines on your local machine.
+It uses [Packer](https://www.packer.io/) to generate `cloud-init` ready Red Hat Enterprise Linux (RHEL) images, and [Terraform](https://www.terraform.io/) to automate the provisioning of virtual machines.
+The included dnsmasq configuration makes the virtual machines resolvable from the local machine using the `home.arpa` domain.
+Additionally, after the provisioning process with Terraform, it will create an updated ansible inventory that can be used for further management and configuration of the provisioned machines.
 
 ## Prerequisites
 
+- Have [ansible](https://www.ansible.com/) installed on your system
 - Have [packer](https://www.packer.io/) installed on your system
 - Have [terraform](https://www.terraform.io/) installed on your system
 - Red Hat Enterprise Linux (RHEL) based distribution
@@ -121,14 +125,15 @@ In case of issues or errors, check the following:
 
 ## Additional Resources
 
+- [Ansible documentation](https://docs.ansible.com/)
 - [Packer documentation](https://www.packer.io/docs)
 - [Terraform documentation](https://www.terraform.io/docs/)
-- [libvirt documentation](https://libvirt.org/docs.html)
+- [Libvirt documentation](https://libvirt.org/docs.html)
 
 Please note that some commands and file paths may be different depending on your operating system and specific setup.
 
 ## Licensing
 
-This repository is licensed under the MIT license. Refer to the [LICENSE](https://chat.openai.com/LICENSE) file for details.
+This repository is licensed under the MIT license. Refer to the [LICENSE](LICENSE) file for details.
 
 This project can serve as a great starting point for automating your home lab infrastructure and can be easily customized to suit your specific needs.
