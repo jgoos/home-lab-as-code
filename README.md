@@ -128,12 +128,12 @@ In case of issues or errors, check the following:
 - [Ansible documentation](https://docs.ansible.com/)
 - [Packer documentation](https://www.packer.io/docs)
 - [Terraform documentation](https://www.terraform.io/docs/)
-- [libvirt documentation](https://libvirt.org/docs.html)
+- [Libvirt documentation](https://libvirt.org/docs.html)
 
 Please note that some commands and file paths may be different depending on your operating system and specific setup.
 
 ## Licensing
 
-This repository is licensed under the MIT license. Refer to the [LICENSE](https://chat.openai.com/LICENSE) file for details.
+This repository is licensed under the MIT license. Refer to the [LICENSE](LICENSE) file for details.
 
 This project can serve as a great starting point for automating your home lab infrastructure and can be easily customized to suit your specific needs.
