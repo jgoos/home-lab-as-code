@@ -1,11 +1,15 @@
 # Home Lab As Code
 
-This repository provides a way to easily create and manage virtual machines on your local machine. It uses [Packer](https://www.packer.io/) to generate `cloud-init` ready Red Hat Enterprise Linux (RHEL) images, and [Terraform](https://www.terraform.io/) to automate the provisioning of virtual machines. The included dnsmasq configuration makes the virtual machines resolvable from the local machine using the `home.arpa` domain.
+This repository provides a way to easily create and manage virtual machines on your local machine.
+It uses [Packer](https://www.packer.io/) to generate `cloud-init` ready Red Hat Enterprise Linux (RHEL) images, and [Terraform](https://www.terraform.io/) to automate the provisioning of virtual machines.
+The included dnsmasq configuration makes the virtual machines resolvable from the local machine using the `home.arpa` domain.
+Additionally, after the provisioning process with Terraform, it will create an updated ansible inventory that can be used for further management and configuration of the provisioned machines.
 
 ## Prerequisites
 
 - Have [packer](https://www.packer.io/) installed on your system
 - Have [terraform](https://www.terraform.io/) installed on your system
+- Have [ansible](https://www.ansible.com/) installed on your system
 - Red Hat Enterprise Linux (RHEL) based distribution
 
 ## Downloading Content
