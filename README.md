@@ -7,9 +7,9 @@ Additionally, after the provisioning process with Terraform, it will create an u
 
 ## Prerequisites
 
+- Have [ansible](https://www.ansible.com/) installed on your system
 - Have [packer](https://www.packer.io/) installed on your system
 - Have [terraform](https://www.terraform.io/) installed on your system
-- Have [ansible](https://www.ansible.com/) installed on your system
 - Red Hat Enterprise Linux (RHEL) based distribution
 
 ## Downloading Content
@@ -125,6 +125,7 @@ In case of issues or errors, check the following:
 
 ## Additional Resources
 
+- [Ansible documentation](https://docs.ansible.com/)
 - [Packer documentation](https://www.packer.io/docs)
 - [Terraform documentation](https://www.terraform.io/docs/)
 - [libvirt documentation](https://libvirt.org/docs.html)
