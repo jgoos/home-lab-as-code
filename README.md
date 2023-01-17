@@ -23,8 +23,8 @@ To create the RHEL images, you'll need to download the appropriate ISO files and
 To build the Packer images, follow these steps:
 
 ``` bash
-cd packer/<rhel_version> 
-packer init . 
+cd packer/<rhel_version>
+packer init .
 packer build .
 ```
 
@@ -114,6 +114,8 @@ To deploy the VMs using the built images, navigate to the `terraform` directory 
 ## Using Ansible to provision VMs
 
 The playbooks in the `ansible` directory can be used to provision the VMs deployed by terraform. You can use `ansible-playbook` command to run the playbooks.
+During the terraform deployment a `ansible.cfg` is created containing the user that is specified in the [variables.tf](terrafrom/variables.tf) file. The default user is `cloud-user`.
+Also the ansible `inventory/hosts` is updated with the new information via terraform.
 
 ## Troubleshooting
 
