@@ -4,8 +4,8 @@ source "qemu" "rhel8" {
     ["-display", "none"],
     ["-cpu", "host"]
   ]
-  iso_url                = "iso-files/rhel-8.6-x86_64-dvd.iso"
-  iso_checksum           = "sha256:c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8"
+  iso_url                = "iso-files/rhel-8.8-x86_64-dvd.iso"
+  iso_checksum           = "sha256:517abcc67ee3b7212f57e180f5d30be3e8269e7a99e127a3399b7935c7e00a09"
   cd_label               = "CIDATA"
   cd_files               = ["config/ks-el8.cfg", "config/cloud.cfg"]
   communicator           = "ssh"

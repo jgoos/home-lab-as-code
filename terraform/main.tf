@@ -2,7 +2,7 @@ terraform {
   required_providers {
     libvirt = {
       source  = "dmacvicar/libvirt"
-      version = "0.6.14"
+      version = "0.7.1"
     }
   }
 }
@@ -12,7 +12,7 @@ locals {
   ansible_sorted_groups = { for k, v in var.vms :
     coalesce(v.group, "ungrouped") => k...
   }
-  rhel_versions_in_tfvars = toset([ for k, v in var.vms :
+  rhel_versions_in_tfvars = toset([for k, v in var.vms :
     v.rhel_version
   ])
 }
@@ -60,26 +60,46 @@ resource "libvirt_domain" "rhel" {
   memory      = each.value.memory
   vcpu        = each.value.cpu
   cloudinit   = libvirt_cloudinit_disk.commoninit[each.key].id
-  running     = true
+  running     = each.value.powered_on
+  machine     = "q35"
+  cpu {
+    mode = "host-passthrough"
+  }
+  # use custom cdrom model that uses sata instead of IDE.
+  # IDE controllers are not available with machine type q35.
+  # The cloud-init configuration of the libvirt provider still uses IDE for cdrom.
+  # See: https://github.com/dmacvicar/terraform-provider-libvirt/issues/885
+  xml {
+    xslt = file("cdrom-model.xsl")
+  }
 
   provisioner "local-exec" {
     command = "ssh-keygen -R ${each.key}.${var.local_domain}"
   }
 
   network_interface {
-    network_name   = "default"
+    network_name   = can(each.value.attached_network) ? each.value.attached_network : "default"
     wait_for_lease = true
   }
 
-  cpu {
-    mode = "host-model"
-  }
   disk {
     volume_id = libvirt_volume.worker[each.key].id
   }
 
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "virtio"
+  }
+
   graphics {
-    type = "vnc"
+    type        = "vnc"
+    listen_type = "address"
+    autoport    = true
+  }
+
+  video {
+    type = "virtio"
   }
 }
 

@@ -1,16 +1,20 @@
 vms = {
-  example1 = {
-    storage      = "20"
-    memory       = "2048"
-    cpu          = "1"
-    rhel_version = "9"
-    group        = "ansible_group1"
+  system1 = {
+    storage          = "20"
+    memory           = "2048"
+    cpu              = "1"
+    rhel_version     = "9"
+    attached_network = "default"
+    powered_on       = true
+    group            = "ansible_group1"
   }
-  exmaple2 = {
-    storage      = "20"
-    memory       = "2048"
-    cpu          = "1"
-    rhel_version = "8"
-    group        = "ansible_group2"
+  system2 = {
+    storage          = "20"
+    memory           = "2048"
+    cpu              = "1"
+    rhel_version     = "8"
+    attached_network = "default"
+    powered_on       = false
+    group            = "ansible_group2"
   }
 }
