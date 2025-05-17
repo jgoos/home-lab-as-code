@@ -3,11 +3,11 @@
   hosts: all
   become: true
   tasks:
-      - name: Enable Firewalld
-        ansible.builtin.systemd:
-          name: firewalld
-          state: started
-          enabled: true
+    - name: Enable Firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+        enabled: true
 
     - name: Enable SELinux
       ansible.posix.selinux:
