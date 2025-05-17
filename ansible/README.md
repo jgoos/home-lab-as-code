@@ -1,6 +1,6 @@
 # Ansible
 
-> **note:** The `inventory/hosts` and `ansible.cfg` are created and managed by terraform. On creation of a new virtual machine, the ssh finger print is removed from known_hosts.
+> **note:** The `inventory/hosts` and `ansible.cfg` are created and managed by terraform. On creation of a new virtual machine, the ssh fingerprint is removed from known_hosts.
 
 ## Collections
 
