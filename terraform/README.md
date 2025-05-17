@@ -11,7 +11,7 @@ Variables
 * Copy `terraform.tfvars.example` to `terraform.tfvars` (or another name that ends with .tfvars)
 * Fill out your `terraform.tfvars` file
 * Run `terraform init` to initialize the directory that contains a Terraform configuration
-* Run `terraform plan -var-file=terraform.tfvars` to evaluate a Terraform configuration to determine the desired state 
+* Run `terraform plan -var-file=terraform.tfvars` to evaluate a Terraform configuration to determine the desired state
 * Run `terraform apply -var-file=terraform.tfvars` to carry out the planned changes to each resource
 
 

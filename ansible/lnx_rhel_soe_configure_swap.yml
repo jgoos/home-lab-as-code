@@ -15,7 +15,7 @@
       ansible.builtin.set_fact:
         swap_memory_size_gb: "{{ (ansible_memtotal_mb * 2) / 1024 | round }}"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb <= 2048
         - ansible_swaptotal_mb >= ( ansible_memtotal_mb * 2 )
 
@@ -24,7 +24,7 @@
       ansible.builtin.set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb > 2048
         - ansible_memtotal_mb <= 8192
         - ansible_swaptotal_mb >= ansible_memtotal_mb
@@ -34,9 +34,9 @@
       ansible.builtin.set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb > 8192
-        - ansible_swaptotal_mb <= 4094 
+        - ansible_swaptotal_mb <= 4094
 
     - name: Resize Swap
       when: change_swap
