@@ -12,4 +12,5 @@
       register: check_tailscale
     - name: Logout of tailscale
       ansible.builtin.command: tailscale logout
+      changed_when: false
       when: check_tailscale.stat.exists

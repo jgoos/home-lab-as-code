@@ -20,16 +20,17 @@
         enabled: true
 
     - name: Install package
-      yum:
+      ansible.builtin.dnf:
         name: tailscale
-        state: latest
+        state: present
 
     - name: Enable service
-      systemd:
+      ansible.builtin.systemd:
         name: tailscaled
         state: started
         enabled: true
 
     - name: Connect system
-      command: "tailscale up --authkey {{ vault_tailscale_auth_key }}"
+      ansible.builtin.command: "tailscale up --authkey {{ vault_tailscale_auth_key }}"
+      changed_when: false
       no_log: true
