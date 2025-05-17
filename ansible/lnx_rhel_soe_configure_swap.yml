@@ -10,7 +10,7 @@
       #
       # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_storage_devices/getting-started-with-swap_managing-storage-devices
       #
-      # ⩽ 2 GB	2 times the amount of RAM
+      # <= 2 GB	2 times the amount of RAM
     - name: Memory less or equal to 2GB ram
       set_fact:
         swap_memory_size_gb: "{{ ( ansible_memtotal_mb * 2 ) / 1024 | round }}"
@@ -19,7 +19,7 @@
         - ansible_memtotal_mb <= 2048
         - ansible_swaptotal_mb >= ( ansible_memtotal_mb * 2 )
 
-      # > 2 GB – 8 GB	Equal to the amount of RAM
+      # > 2 GB - 8 GB	Equal to the amount of RAM
     - name: Memory less or equal to 8GB ram
       set_fact:
         swap_memory_size_gb: "4"
