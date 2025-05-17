@@ -1,5 +1,5 @@
 ---
-- name: Dynamicly configure Swap
+- name: Dynamically configure Swap
   hosts: all
   become: true
   vars:
