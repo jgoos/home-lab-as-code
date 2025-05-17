@@ -15,7 +15,7 @@
       set_fact:
         swap_memory_size_gb: "{{ ( ansible_memtotal_mb * 2 ) / 1024 | round }}"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb <= 2048
         - ansible_swaptotal_mb >= ( ansible_memtotal_mb * 2 )
 
@@ -24,19 +24,19 @@
       set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb > 2048
         - ansible_memtotal_mb <= 8192
         - ansible_swaptotal_mb >= ansible_memtotal_mb
 
       # > 8 GB – 64 GB	At least 4 GB
-    - name: Memory bigger than 8GB 
+    - name: Memory bigger than 8GB
       set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
-      when: 
+      when:
         - ansible_memtotal_mb > 8192
-        - ansible_swaptotal_mb <= 4094 
+        - ansible_swaptotal_mb <= 4094
 
     - name: Resize Swap
       block:
