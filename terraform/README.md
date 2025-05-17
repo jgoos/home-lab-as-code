@@ -1,13 +1,11 @@
-Terraform
-===
+# Terraform
 
-Requirements
-===
+## Requirements
 
 * [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 
-Variables
-===
+## Variables
+
 * Copy `terraform.tfvars.example` to `terraform.tfvars` (or another name that ends with .tfvars)
 * Fill out your `terraform.tfvars` file
 * Run `terraform init` to initialize the directory that contains a Terraform configuration
