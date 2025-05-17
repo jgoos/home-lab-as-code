@@ -11,7 +11,7 @@ steps:
 ### Download iso files
 
 Check the `rhel<version>.pkr.hcl` packer files for what iso files are needed.
-Download en put these in the iso-files directory.
+Download and put these in the iso-files directory.
 
 ## Build packer images
 
@@ -19,7 +19,7 @@ Download en put these in the iso-files directory.
 $ packer init .
 ```
 
-To build all versions in parralel.
+To build all versions in parallel.
 
 ``` shell
 $ packer build .

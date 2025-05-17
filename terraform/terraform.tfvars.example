@@ -6,7 +6,7 @@ vms = {
     rhel_version = "9"
     group        = "ansible_group1"
   }
-  exmaple2 = {
+  example2 = {
     storage      = "20"
     memory       = "2048"
     cpu          = "1"
