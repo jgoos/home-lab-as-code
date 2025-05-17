@@ -12,8 +12,8 @@
       #
       # ⩽ 2 GB	2 times the amount of RAM
     - name: Memory less or equal to 2GB ram
-      set_fact:
-        swap_memory_size_gb: "{{ ( ansible_memtotal_mb * 2 ) / 1024 | round }}"
+      ansible.builtin.set_fact:
+        swap_memory_size_gb: "{{ (ansible_memtotal_mb * 2) / 1024 | round }}"
         change_swap: true
       when: 
         - ansible_memtotal_mb <= 2048
@@ -21,7 +21,7 @@
 
       # > 2 GB – 8 GB	Equal to the amount of RAM
     - name: Memory less or equal to 8GB ram
-      set_fact:
+      ansible.builtin.set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
       when: 
@@ -30,8 +30,8 @@
         - ansible_swaptotal_mb >= ansible_memtotal_mb
 
       # > 8 GB – 64 GB	At least 4 GB
-    - name: Memory bigger than 8GB 
-      set_fact:
+    - name: Memory bigger than 8GB
+      ansible.builtin.set_fact:
         swap_memory_size_gb: "4"
         change_swap: true
       when: 
@@ -39,24 +39,27 @@
         - ansible_swaptotal_mb <= 4094 
 
     - name: Resize Swap
+      when: change_swap
       block:
         - name: Swap OFF
           ansible.builtin.command: "swapoff -a"
+          changed_when: false
 
         - name: Resize Swap
           community.general.lvol:
             vg: "{{ swap_vg_name }}"
             lv: "{{ swap_lv_name }}"
             size: "{{ swap_memory_size_gb }}g"
-            shrink: no
+            shrink: false
             state: present
             active: true
           register: resize_swap
-
-        - name: Make Swap
-          ansible.builtin.command: "mkswap /dev/mapper/{{ swap_vg_name }}-{{ swap_lv_name }}"
-          when: resize_swap.changed
+          notify: Make Swap
 
         - name: Swap ON
           ansible.builtin.command: "swapon -a"
-      when: change_swap
+          changed_when: false
+
+handlers:
+  - name: Make Swap
+    ansible.builtin.command: "mkswap /dev/mapper/{{ swap_vg_name }}-{{ swap_lv_name }}"
