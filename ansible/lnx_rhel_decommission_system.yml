@@ -6,10 +6,10 @@
     - name: Remove subscriptions
       community.general.redhat_subscription:
         state: absent
-    - name: Remove subscriptions
+    - name: Check Tailscale presence
       ansible.builtin.stat:
         path: /usr/bin/tailscale
       register: check_tailscale
     - name: Logout of tailscale
       ansible.builtin.command: tailscale logout
-      when: check_tailscale.stat.islnk is defined
+      when: check_tailscale.stat.exists
