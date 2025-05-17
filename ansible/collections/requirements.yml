@@ -2,5 +2,4 @@
 collections:
   - ansible.posix
   - community.general
-  - community.general.rhsm_repository
   - community.libvirt
