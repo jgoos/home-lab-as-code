@@ -10,8 +10,8 @@ steps:
 
 ### Download iso files
 
-Check the `rhel<version>.pkr.hcl` packer files for what iso files are needed.
-Download and put these in the iso-files directory.
+Check `rhel.pkr.hcl` for what ISO files are needed.
+Download and put these in the `iso-files` directory.
 
 ## Build packer images
 
@@ -25,8 +25,8 @@ To build all versions in parallel.
 $ packer build .
 ```
 
-To build a specific version.
+To build a specific version (e.g. RHEL 8).
 
 ``` shell
-$ packer build <template_name>
+$ packer build -only=qemu.rhel.8 .
 ```
