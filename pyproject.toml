@@ -1,0 +1,16 @@
+[project]
+name = "home-lab-as-code"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "ansible-core>=2.18.6",
+    "bandit>=1.8.3",
+    "black>=25.1.0",
+    "molecule>=25.4.0",
+    "mypy>=1.15.0",
+    "pip-audit>=2.9.0",
+    "pylint>=3.3.7",
+    "pytest>=8.3.5",
+    "ruff>=0.11.11",
+    "yamllint>=1.37.1",
+]
