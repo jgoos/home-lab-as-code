@@ -25,8 +25,8 @@ To build all versions in parallel.
 $ packer build .
 ```
 
-To build a specific version (e.g. RHEL 8).
+To build a specific version (e.g. RHEL 9 or RHEL 10).
 
 ``` shell
-$ packer build -only=qemu.rhel.8 .
+$ packer build -only=qemu.rhel.9 .
 ```
