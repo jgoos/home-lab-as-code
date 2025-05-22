@@ -11,7 +11,8 @@
     },
     {
       "id": "deduplicate-readme",
-      "description": "Deduplicate repeated Terraform instructions across README files"
+      "description": "Deduplicate repeated Terraform instructions across README files",
+      "done": true
     }
   ]
 }

@@ -99,17 +99,7 @@ sudo systemctl restart NetworkManager
 
 ## Using Terraform to deploy VMs
 
-To deploy the VMs using the built images, navigate to the `terraform` directory and follow these steps:
-
-### Variables
-
-1. Copy `terraform.tfvars.example` to `terraform.tfvars` (or another name that ends with .tfvars)
-2. Fill out your `terraform.tfvars` file
-3. Run `terraform init` to initialize the directory that contains a Terraform configuration
-4. Run `terraform plan -var-file=terraform.tfvars` to evaluate a Terraform configuration to determine the desired state
-5. Run `terraform apply -var-file=terraform.tfvars` to carry out the planned changes to each resource
-
-> **note**: you can auto load the tfvars file without the `-var-file=terraform.tfvars` by putting `auto` in the name. For example: `terraform.auto.tfvars`
+Navigate to the `terraform` directory to deploy the VMs. Detailed steps for configuring variables and running Terraform are documented in [terraform/README.md](terraform/README.md).
 
 ## Using Ansible to provision VMs
 
