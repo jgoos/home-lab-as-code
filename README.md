@@ -16,7 +16,7 @@ Additionally, after the provisioning process with Terraform, it will create an u
 
 ### Download ISO files
 
-To create the RHEL images, you'll need to download the appropriate ISO files and place them in the `packer/iso-files` directory. Check the `rhel8.pkr.hcl` and `rhel9.pkr.hcl` packer config files to see which ISO files are needed.
+To create the RHEL images, you'll need to download the appropriate ISO files and place them in the `packer/iso-files` directory. Check the `rhel.pkr.hcl` packer config file to see which ISO files are needed for each supported release.
 
 ## Building Packer Images
 

@@ -20,6 +20,11 @@ variable "rhel_builds" {
       iso_checksum = "sha256:a387f3230acf87ee38707ee90d3c88f44d7bf579e6325492f562f0f1f9449e89"
       ks_file      = "config/ks-el9.cfg"
     }
+    "10" = {
+      iso_url      = "iso-files/rhel-baseos-10.0-x86_64-dvd.iso"
+      iso_checksum = "sha256:TODO"
+      ks_file      = "config/ks-el10.cfg"
+    }
   }
 }
 
