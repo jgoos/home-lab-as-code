@@ -1,0 +1,17 @@
+{
+  "tasks": [
+    {
+      "id": "consolidate-packer-configs",
+      "description": "Consolidate rhel7.pkr.hcl, rhel8.pkr.hcl and rhel9.pkr.hcl into a single templated file to reduce duplication"
+    },
+    {
+      "id": "consolidate-ansible-start-stop",
+      "description": "Combine libvirt_start_vms.yml and libvirt_stop_vms.yml into one playbook parameterized by state"
+    },
+    {
+      "id": "deduplicate-readme",
+      "description": "Deduplicate repeated Terraform instructions across README files"
+    }
+  ]
+}
+
