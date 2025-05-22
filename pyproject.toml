@@ -7,6 +7,7 @@ dependencies = [
     "bandit>=1.8.3",
     "black>=25.1.0",
     "checkov>=3.1.29",
+    "cryptography>=45.0.2",
     "cyclonedx-python-lib>=9.1.0",
     "molecule>=25.4.0",
     "mypy>=1.15.0",
