@@ -2,7 +2,8 @@
   "tasks": [
     {
       "id": "consolidate-packer-configs",
-      "description": "Consolidate rhel7.pkr.hcl, rhel8.pkr.hcl and rhel9.pkr.hcl into a single templated file to reduce duplication"
+      "description": "Consolidate rhel7.pkr.hcl, rhel8.pkr.hcl and rhel9.pkr.hcl into a single templated file to reduce duplication",
+      "done": true
     },
     {
       "id": "consolidate-ansible-start-stop",
