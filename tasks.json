@@ -7,7 +7,8 @@
     },
     {
       "id": "consolidate-ansible-start-stop",
-      "description": "Combine libvirt_start_vms.yml and libvirt_stop_vms.yml into one playbook parameterized by state"
+      "description": "Combine libvirt_start_vms.yml and libvirt_stop_vms.yml into one playbook parameterized by state",
+      "done": true
     },
     {
       "id": "deduplicate-readme",

@@ -1,10 +1,12 @@
 ---
-- name: Stop Virtual Machines
+- name: Manage Virtual Machines
   hosts: all
   connection: local
+  vars:
+    vm_state: running
   tasks:
-    - name: Stop the Virtual Machine
+    - name: Ensure the VM is in the desired state
       community.libvirt.virt:
         name: "{{ inventory_hostname }}"
-        state: shutdown
+        state: "{{ vm_state }}"
       delegate_to: localhost
