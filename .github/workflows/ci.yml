@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Lint, Validate and Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            ~/.cache/pip
+          key: ${{ runner.os }}-uv-${{ matrix.python-version }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-${{ matrix.python-version }}-
+
+      - name: Install uv package manager
+        run: pip install --upgrade uv
+
+      - name: Install Python dependencies
+        run: uv pip install --system -r uv.lock
+
+      - name: Install Ansible collections
+        if: files.exists('ansible/collections/requirements.yml')
+        run: ansible-galaxy collection install -r ansible/collections/requirements.yml --force
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v2
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: Black formatting check
+        run: black --check .
+
+      - name: Bandit security scan
+        run: bandit -r .
+
+      - name: Dependency vulnerability scan
+        run: pip-audit
+
+      - name: Mypy type checking
+        run: mypy .
+
+      - name: Pylint
+        run: |
+          find . -path ./\.venv -prune -o -name "*.py" -print0 | xargs -0 pylint
+
+      - name: YAML lint
+        run: yamllint .
+
+      - name: Terraform format check
+        run: terraform fmt -check -recursive terraform
+
+      - name: Terraform validate
+        run: terraform validate terraform
+
+      - name: Packer format check
+        run: packer fmt -check packer
+
+      - name: Packer validate
+        run: |
+          packer validate packer/rhel7.pkr.hcl
+          packer validate packer/rhel8.pkr.hcl
+          packer validate packer/rhel9.pkr.hcl
+
+      - name: Ansible syntax check
+        run: |
+          for playbook in ansible/*.yml; do
+            ansible-playbook --syntax-check "$playbook"
+          done
+
+      - name: Run tests
+        run: pytest -q
