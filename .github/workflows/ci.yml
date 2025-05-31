@@ -41,7 +41,7 @@ jobs:
         run: uv pip install --system -r uv.lock
 
       - name: Install Ansible collections
-        if: ${{ hashFiles('ansible/collections/requirements.yml') != '' }}
+        if: files.exists('ansible/collections/requirements.yml')
         run: ansible-galaxy collection install -r ansible/collections/requirements.yml --force
 
       - name: Set up Terraform
@@ -75,20 +75,17 @@ jobs:
       - name: Terraform format check
         run: terraform fmt -check -recursive terraform
 
-      - name: Terraform init
-        run: terraform -chdir=terraform init -backend=false
-
       - name: Terraform validate
-        run: terraform -chdir=terraform validate
+        run: terraform validate terraform
 
       - name: Packer format check
-        run: packer fmt -check -recursive packer
+        run: packer fmt -check packer
 
       - name: Packer validate
         run: |
-          packer validate -syntax-only packer/rhel7.pkr.hcl
-          packer validate -syntax-only packer/rhel8.pkr.hcl
-          packer validate -syntax-only packer/rhel9.pkr.hcl
+          packer validate packer/rhel7.pkr.hcl
+          packer validate packer/rhel8.pkr.hcl
+          packer validate packer/rhel9.pkr.hcl
 
       - name: Ansible syntax check
         run: |
