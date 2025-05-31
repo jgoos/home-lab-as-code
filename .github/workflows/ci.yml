@@ -46,6 +46,7 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
+        
       - name: Terraform init
         run: terraform -chdir=terraform init -backend=false
 
