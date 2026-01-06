@@ -1,6 +1,12 @@
 variable "vms" {
   description = "Virtual Machines"
-  type        = map(any)
+  type = map(object({
+    storage      = number
+    memory       = number
+    cpu          = number
+    rhel_version = string
+    group        = optional(string)
+  }))
 }
 
 variable "ssh_public_key" {

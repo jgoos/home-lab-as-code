@@ -4,15 +4,19 @@ terraform {
       source  = "dmacvicar/libvirt"
       version = "0.6.14"
     }
+    null = {
+      source  = "hashicorp/null"
+      version = "3.2.2"
+    }
   }
 }
 
 # create ansible groups with input from virtual machine specs in tfvars
 locals {
   ansible_sorted_groups = { for k, v in var.vms :
-    coalesce(v.group, "ungrouped") => k...
+    try(v.group, "ungrouped") => k...
   }
-  rhel_versions_in_tfvars = toset([ for k, v in var.vms :
+  rhel_versions_in_tfvars = toset([for k, v in var.vms :
     v.rhel_version
   ])
 }
@@ -48,7 +52,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
       hostname            = "${each.key}"
       host_fqdn           = "${each.key}.${var.local_domain}"
       cloud_user          = "${var.cloud_user}"
-      ssh_pub_key_content = file("~/.ssh/${var.ssh_public_key}")
+      ssh_pub_key_content = file(pathexpand("~/.ssh/${var.ssh_public_key}"))
     }
   )
 }
@@ -84,6 +88,7 @@ resource "libvirt_domain" "rhel" {
 }
 
 resource "local_file" "ansible_inventory_file" {
+  depends_on = [null_resource.ansible_inventory_dir]
   content = templatefile("${path.module}/templates/ansible_inventory.tftpl",
     {
       ansible_groups = local.ansible_sorted_groups
@@ -91,7 +96,7 @@ resource "local_file" "ansible_inventory_file" {
     }
   )
   filename        = "${path.module}/../ansible/inventory/hosts"
-  file_permission = 640
+  file_permission = "0640"
 }
 
 resource "local_file" "ansible_config_file" {
@@ -101,5 +106,11 @@ resource "local_file" "ansible_config_file" {
     }
   )
   filename        = "${path.module}/../ansible/ansible.cfg"
-  file_permission = 640
+  file_permission = "0640"
+}
+
+resource "null_resource" "ansible_inventory_dir" {
+  provisioner "local-exec" {
+    command = "mkdir -p ${path.module}/../ansible/inventory"
+  }
 }
