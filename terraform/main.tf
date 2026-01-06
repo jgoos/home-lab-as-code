@@ -14,7 +14,7 @@ terraform {
 # create ansible groups with input from virtual machine specs in tfvars
 locals {
   ansible_sorted_groups = { for k, v in var.vms :
-    try(v.group, "ungrouped") => k...
+    coalesce(v.group, "ungrouped") => k...
   }
   rhel_versions_in_tfvars = toset([for k, v in var.vms :
     v.rhel_version
