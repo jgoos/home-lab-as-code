@@ -18,15 +18,69 @@ Additionally, after the provisioning process with Terraform, it will create an u
 
 To create the RHEL images, you'll need to download the appropriate ISO files and place them in the `packer/iso-files` directory. Check the `rhel8.pkr.hcl`, `rhel9.pkr.hcl`, and `rhel10.pkr.hcl` packer config files to see which ISO files are needed.
 
+## RHEL10 Kickstart media note
+
+The RHEL10 build uses an `OEMDRV`-labeled kickstart ISO. The Kickstart file must be named `ks-el10.cfg` at the root of the attached CD. This is created automatically from `packer/config/ks-el10.cfg` via `cd_files` in `packer/rhel10.pkr.hcl`. Edit `packer/config/ks-el10.cfg` for RHEL10 changes.
+
 ## Building Packer Images
 
 To build the Packer images, follow these steps:
 
 ``` bash
-cd packer/<rhel_version>
-packer init .
-packer build .
+packer init packer/
+packer build packer/
 ```
+
+## RHEL10 Packer build (local)
+
+This repo includes a local runner that standardizes logs, timestamps, and debug output for the RHEL 10.1 image build.
+
+Prerequisites (beyond the general list above):
+- qemu-kvm and libvirt installed and working
+- `guestfs-tools` for `virt-sysprep`, `virt-cat`, and `virt-ls`
+- ISO placed at `packer/iso-files/rhel-10.1-x86_64-dvd.iso`
+
+Expected SHA-256 for the ISO:
+`5925e05c32d8324a72e146a29293d60707571817769de73df63eab8dbd6d3196`
+
+Local run commands:
+
+``` bash
+make packer-preflight
+make packer-init
+make packer-validate
+make packer-build
+```
+
+For other versions, override `RHEL_VERSION` (or rely on the `ISO_*_<version>` defaults), and optionally set `ISO_PATH`, `ISO_SHA256`, or `ISO_LABEL` to override.
+
+Build all versions in one command:
+
+``` bash
+make packer-build-all
+```
+
+Debug build with an interactive breakpoint before provisioning:
+
+``` bash
+BREAKPOINT_ENABLED=true make packer-build-debug
+```
+
+Artifacts and logs:
+- `artifacts/packer/packer-debug.log` (Packer debug log)
+- `artifacts/packer/packer-ui.log` (terminal UI stream)
+- `artifacts/packer/serial-rhel10.log` (VM console/serial output)
+- `artifacts/packer/manifest-rhel10.json`
+- `artifacts/packer/validation-rhel10.txt`
+- `artifacts/packer/failure-context-rhel10.txt` (only on errors)
+- `artifacts/packer/output-rhel10/` (image output directory)
+
+Troubleshooting checklist:
+- Stuck at boot menu: check the VNC console and `artifacts/packer/serial-rhel10.log`; RHEL10 uses the GRUB2 command line (`c`) with OEMDRV autodetection.
+- Stuck in Anaconda: inspect `serial-rhel10.log`; verify the ISO path and that the kickstart file is on the OEMDRV disk.
+- No network / DHCP: confirm the libvirt network is active; check for DHCP lease and `network --bootproto=dhcp --device=eth0 --activate` in the kickstart.
+- SSH timeout: verify `sshd` is enabled and password auth is allowed; check `serial-rhel10.log` for early boot errors.
+- Provisioning failure: inspect `failure-context-rhel10.txt`, `packer-ui.log`, and `packer-debug.log`; re-run with `make packer-build-debug` to step through.
 
 ## Configuring libvirt
 

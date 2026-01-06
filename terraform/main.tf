@@ -29,7 +29,7 @@ provider "libvirt" {
 resource "libvirt_volume" "rhel" {
   for_each = local.rhel_versions_in_tfvars
   name     = "rhel${each.key}"
-  source   = "../packer/output-rhel${each.key}/packer-rhel-${each.key}-x86_64"
+  source   = "${path.module}/${var.packer_output_dir}/output-rhel${each.key}/packer-rhel-${each.key}-x86_64"
 }
 
 resource "libvirt_volume" "worker" {

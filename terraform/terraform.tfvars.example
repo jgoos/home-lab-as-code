@@ -21,3 +21,5 @@ vms = {
     group        = "ansible_group3"
   }
 }
+
+# packer_output_dir = "../artifacts/packer"

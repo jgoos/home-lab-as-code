@@ -23,3 +23,9 @@ variable "local_domain" {
   default = "home.arpa"
   type    = string
 }
+
+variable "packer_output_dir" {
+  description = "Path (relative to terraform/) where Packer images are stored."
+  type        = string
+  default     = "../artifacts/packer"
+}

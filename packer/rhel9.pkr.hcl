@@ -1,35 +1,64 @@
+locals {
+  rhel9_output_directory = "${local.artifacts_dir_resolved}/output-rhel9"
+  rhel9_vm_name          = "packer-rhel-9-x86_64"
+  rhel9_image_path       = "${local.rhel9_output_directory}/${local.rhel9_vm_name}"
+  rhel9_serial_log       = "${local.artifacts_dir_resolved}/serial-rhel9.log"
+  rhel9_manifest_path    = "${local.artifacts_dir_resolved}/manifest-rhel9.json"
+}
+
 source "qemu" "rhel9" {
   qemu_binary = "/usr/libexec/qemu-kvm"
   qemuargs = [
     ["-display", "none"],
-    ["-cpu", "host"]
+    ["-cpu", "host"],
+    ["-serial", "file:${local.rhel9_serial_log}"]
   ]
-  iso_url                = "iso-files/rhel-baseos-9.0-x86_64-dvd.iso"
-  iso_checksum           = "sha256:a387f3230acf87ee38707ee90d3c88f44d7bf579e6325492f562f0f1f9449e89"
-  cd_label               = "CIDATA"
-  cd_files               = ["config/ks-el9.cfg", "config/cloud.cfg"]
+  iso_url                = local.iso_path_resolved
+  iso_checksum           = var.iso_checksum
+  cd_label               = "OEMDRV"
+  cd_files               = ["${path.root}/config/ks-el9.cfg", "${path.root}/config/cloud.cfg"]
   communicator           = "ssh"
-  shutdown_command       = "echo 'packer' | sudo -S shutdown -P now"
-  disk_size              = "10G"
-  memory                 = "1024"
-  cpus                   = "1"
+  shutdown_command       = var.shutdown_command
+  disk_size              = var.disk_size
+  memory                 = var.memory
+  cpus                   = var.cpus
   format                 = "qcow2"
   accelerator            = "kvm"
-  ssh_username           = "cloud-user"
-  ssh_password           = "cloud-user"
-  ssh_timeout            = "20m"
-  ssh_handshake_attempts = "20"
+  ssh_username           = var.ssh_username
+  ssh_password           = var.ssh_password
+  ssh_timeout            = var.ssh_timeout
+  ssh_handshake_attempts = var.ssh_handshake_attempts
   headless               = true
-  vm_name                = "packer-rhel-9-x86_64"
+  vm_name                = local.rhel9_vm_name
+  output_directory       = local.rhel9_output_directory
   net_device             = "virtio-net"
   disk_interface         = "virtio"
-  boot_wait              = "15s"
-  boot_command           = ["<up><wait><tab><wait> inst.text inst.ksstrict inst.ks=cdrom:/dev/sr1:/ks-el9.cfg<enter><wait>"]
+  boot_wait              = var.boot_wait
+  boot_key_interval      = var.boot_key_interval
+  boot_command           = ["<up><wait><tab><wait> inst.text inst.ksstrict inst.ks=hd:LABEL=OEMDRV:/ks-el9.cfg<enter><wait>"]
 }
 
 build {
   sources = ["source.qemu.rhel9"]
+
+  provisioner "shell" {
+    inline = [
+      "sudo sed -i 's/^#\\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config",
+      "sudo sed -i 's/^#\\?ChallengeResponseAuthentication.*/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config",
+      "sudo sed -i 's/^#\\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config",
+      "if grep -q '^disable_root:' /etc/cloud/cloud.cfg; then sudo sed -i 's/^disable_root:.*/disable_root: 1/' /etc/cloud/cloud.cfg; else echo 'disable_root: 1' | sudo tee -a /etc/cloud/cloud.cfg >/dev/null; fi",
+      "if grep -q '^ssh_pwauth:' /etc/cloud/cloud.cfg; then sudo sed -i 's/^ssh_pwauth:.*/ssh_pwauth: 0/' /etc/cloud/cloud.cfg; else echo 'ssh_pwauth: 0' | sudo tee -a /etc/cloud/cloud.cfg >/dev/null; fi"
+    ]
+  }
+
   post-processor "shell-local" {
-    inline = ["virt-sysprep -a output-rhel9/packer-rhel-9-x86_64 --operations defaults,-lvm-uuids --run-command '> /etc/machine-id'"]
+    inline = [
+      "virt-sysprep -a ${local.rhel9_image_path} --operations defaults,-lvm-uuids --run-command '> /etc/machine-id'"
+    ]
+  }
+
+  post-processor "manifest" {
+    output     = local.rhel9_manifest_path
+    strip_path = true
   }
 }
