@@ -15,7 +15,7 @@
         - ansible_distribution == "RedHat"
         - ansible_distribution_major_version == "7"
 
-    - name: Enable required rhel8 or rhel9 repository
+    - name: Enable required rhel8, rhel9, or rhel10 repository
       vars:
         codeready_repo: >-
           {{ "codeready-builder-for-rhel-" ~
@@ -27,7 +27,7 @@
         state: enabled
       when:
         - ansible_distribution == "RedHat"
-        - ansible_distribution_major_version in ["8", "9"]
+        - ansible_distribution_major_version in ["8", "9", "10"]
 
     - name: Install EPEL rpm
       vars:

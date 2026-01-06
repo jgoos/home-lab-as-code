@@ -13,4 +13,11 @@ vms = {
     rhel_version = "8"
     group        = "ansible_group2"
   }
+  example3 = {
+    storage      = 20
+    memory       = 2048
+    cpu          = 1
+    rhel_version = "10"
+    group        = "ansible_group3"
+  }
 }

@@ -50,3 +50,5 @@ Create an activation key. https://access.redhat.com/management/activation_keys
 ### Tailscale
 
 For authkey usage see: https://tailscale.com/kb/1085/auth-keys/
+
+> **note:** `lnx_rhel8_tailscale.yml` uses the RHEL 8 Tailscale repository URLs. Update the playbook if you need RHEL 9/10 support.
