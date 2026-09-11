@@ -1,0 +1,31 @@
+# Pre-existing ansible-lint findings, captured so the gate can go green on a
+# repo that has never been linted. This is a burndown list, not a permanent
+# exemption: delete a line, fix what it was hiding, commit. New violations are
+# NOT covered by this file and will fail the hook.
+#
+# Regenerate after fixing a batch:  ansible-lint --generate-ignore
+#
+# args[module] entries are a side effect of mock_modules in .ansible-lint -
+# a mocked module has no argument spec, so its parameters cannot be checked.
+# They clear themselves once linting runs with the collections installed.
+
+# This file contains ignores rule violations for ansible-lint
+ansible/libvirt_start_vms.yml args[module]
+ansible/libvirt_stop_vms.yml args[module]
+ansible/lnx_rhel8_tailscale.yml fqcn[action-core]
+ansible/lnx_rhel8_tailscale.yml no-changed-when
+ansible/lnx_rhel8_tailscale.yml package-latest
+ansible/lnx_rhel_decommission_system.yml args[module]
+ansible/lnx_rhel_decommission_system.yml no-changed-when
+ansible/lnx_rhel_soe_configure_swap.yml fqcn[action-core]
+ansible/lnx_rhel_soe_configure_swap.yml jinja[spacing]
+ansible/lnx_rhel_soe_configure_swap.yml key-order[task]
+ansible/lnx_rhel_soe_configure_swap.yml no-changed-when
+ansible/lnx_rhel_soe_configure_swap.yml no-handler
+ansible/lnx_rhel_soe_configure_swap.yml yaml[comments-indentation]
+ansible/lnx_rhel_soe_defaults.yml args[module]
+ansible/lnx_rhel_soe_defaults.yml fqcn[action-core]
+ansible/lnx_rhel_soe_enable_epel.yml args[module]
+ansible/lnx_rhel_soe_enable_epel.yml fqcn[action-core]
+ansible/lnx_rhel_soe_enable_epel.yml jinja[spacing]
+ansible/lnx_rhel_soe_subscribe_system.yml args[module]

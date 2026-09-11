@@ -1,0 +1,20 @@
+---
+# Defaults are tuned for hand-written config, not for Ansible. Playbooks here
+# run past 80 columns on module arguments and use `yes`/`no` throughout, both
+# of which are idiomatic rather than mistakes.
+extends: default
+
+rules:
+  line-length:
+    max: 160
+    level: warning
+  truthy:
+    allowed-values: ["true", "false", "yes", "no"]
+  comments:
+    min-spaces-from-content: 1
+  document-start:
+    present: true
+
+ignore: |
+  .git/
+  uv.lock

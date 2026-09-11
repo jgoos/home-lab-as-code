@@ -64,3 +64,6 @@ terraform.rc
 ansible/ansible.cfg
 ansible/inventory/hosts
 ansible/group_vars/all/vault.yml
+
+# ansible-lint materialises collections and caches here
+.ansible/

@@ -12,7 +12,7 @@ locals {
   ansible_sorted_groups = { for k, v in var.vms :
     coalesce(v.group, "ungrouped") => k...
   }
-  rhel_versions_in_tfvars = toset([ for k, v in var.vms :
+  rhel_versions_in_tfvars = toset([for k, v in var.vms :
     v.rhel_version
   ])
 }

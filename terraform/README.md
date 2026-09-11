@@ -19,15 +19,15 @@
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_libvirt"></a> [libvirt](#requirement\_libvirt) | 0.6.14 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_libvirt"></a> [libvirt](#provider\_libvirt) | 0.6.14 |
-| <a name="provider_local"></a> [local](#provider\_local) | 2.2.3 |
+| <a name="provider_local"></a> [local](#provider\_local) | n/a |
 
 ## Modules
 
@@ -36,7 +36,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [libvirt_cloudinit_disk.commoninit](https://registry.terraform.io/providers/dmacvicar/libvirt/0.6.14/docs/resources/cloudinit_disk) | resource |
 | [libvirt_domain.rhel](https://registry.terraform.io/providers/dmacvicar/libvirt/0.6.14/docs/resources/domain) | resource |
 | [libvirt_volume.rhel](https://registry.terraform.io/providers/dmacvicar/libvirt/0.6.14/docs/resources/volume) | resource |
@@ -47,7 +47,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cloud_user"></a> [cloud\_user](#input\_cloud\_user) | n/a | `string` | `"cloud-user"` | no |
 | <a name="input_local_domain"></a> [local\_domain](#input\_local\_domain) | n/a | `string` | `"home.arpa"` | no |
 | <a name="input_ssh_public_key"></a> [ssh\_public\_key](#input\_ssh\_public\_key) | n/a | `string` | `"id_ed25519.pub"` | no |

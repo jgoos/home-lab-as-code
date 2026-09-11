@@ -1,0 +1,18 @@
+---
+# Collections listed in ansible/collections/requirements.yml are not installed
+# inside pre-commit's isolated environment, so syntax-check cannot resolve the
+# modules that come from them and reports every one as unknown. Declaring them
+# here keeps syntax-check working for everything else instead of switching the
+# rule off wholesale.
+#
+# CI should install the collections with `ansible-galaxy install -r` and lint
+# without these mocks, which is the only way these calls get checked for real.
+mock_modules:
+  - ansible.posix.selinux
+  - community.general.lvol
+  - community.general.redhat_subscription
+  - community.general.rhsm_repository
+  - community.libvirt.virt
+
+exclude_paths:
+  - .claude/
