@@ -23,9 +23,15 @@ To create the RHEL images, you'll need to download the appropriate ISO files and
 To build the Packer images, follow these steps:
 
 ``` bash
-cd packer/<rhel_version>
+cd packer
 packer init .
 packer build .
+```
+
+To build one RHEL version instead of all of them, filter by source name:
+
+``` bash
+packer build -only='qemu.rhel9' .
 ```
 
 ## Configuring libvirt
