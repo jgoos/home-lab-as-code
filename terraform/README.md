@@ -27,7 +27,7 @@
 | Name | Version |
 | ---- | ------- |
 | <a name="provider_libvirt"></a> [libvirt](#provider\_libvirt) | 0.6.14 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.9.1 |
 
 ## Modules
 
